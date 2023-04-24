@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"trustPlatform/bulletproofs"
 	"trustPlatform/common"
 	"trustPlatform/org"
 	"trustPlatform/user"
@@ -62,6 +63,8 @@ func (t *TrustPlatformCC) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return org.Invoke(stub)
 	} else if strings.HasPrefix(function, "/common") {
 		return common.Invoke(stub)
+	} else if strings.HasPrefix(function, "/zk") {
+		return bulletproofs.Invoke(stub)
 	}
 
 	return shim.Error("Invalid invoke function name. Expecting \"/user\" ")

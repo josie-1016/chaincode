@@ -198,6 +198,7 @@ github.com/klauspost/compress v1.9.8/go.mod h1:RyIbtBH6LamlWaDj8nUwkbUhJ87Yi3uG0
 github.com/konsorten/go-windows-terminal-sequences v1.0.1 h1:mweAR1A6xJ3oS2pRaGiHgQ4OO8tzTaLawm8vnODuwDk=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515/go.mod h1:+0opPa2QZZtGFBFZlji/RkVcI2GknAs/DXo4wKdlNEc=
+github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pretty v0.2.0 h1:s5hAObm+yFO5uHYt5dYjxi2rXrsnmRpJx4OYvIWUaQs=
 github.com/kr/pretty v0.2.0/go.mod h1:ipq/a2n7PKx3OHsz4KJII5eveXtPO4qwEXGdVfWzfnI=
@@ -309,10 +310,12 @@ github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69
 github.com/sykesm/zap-logfmt v0.0.3 h1:3Wrhf7+I9JEUD8B6KPtDAr9j2jrS0/EPLy7GCE1t/+U=
 github.com/sykesm/zap-logfmt v0.0.3/go.mod h1:AuBd9xQjAe3URrWT1BBDk2v2onAZHkZkWRMiYZXiZWA=
 github.com/syndtr/gocapability v0.0.0-20170704070218-db04d3cc01c8/go.mod h1:hkRG7XYTFWNJGYcbNJQlaLq0fg1yr4J4t/NcTQtrfww=
+github.com/thorweiyan/DecentralizedABE2020 v1.0.1 h1:belWGB2qEDMWDoTTwOOd+82YefeJKBAXGPF0mE7TB7w=
+github.com/thorweiyan/DecentralizedABE2020 v1.0.1/go.mod h1:CCn9hWQbdUeOdFoFP+kL/sPtnT/Q5pfaEqT+c+4Y0wA=
+github.com/thorweiyan/DecentralizedABE2020 v1.1.1 h1:oROgOi7OnVMWacR2frsuq9d0X3nedo7NQCIeYCMWoXA=
+github.com/thorweiyan/DecentralizedABE2020 v1.1.1/go.mod h1:CCn9hWQbdUeOdFoFP+kL/sPtnT/Q5pfaEqT+c+4Y0wA=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/urfave/cli v0.0.0-20171014202726-7bc6a0acffa5/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
-github.com/wjfn/DecentralizedABE2020 v1.1.1 h1:jYp0vUuYE6Cawez63X5kfgJGl2WOiiNXt6I9nUogsME=
-github.com/wjfn/DecentralizedABE2020 v1.1.1/go.mod h1:02UU/J97iHA+ERwyzQ1bh/CTOex6AbbRrAhUI8ZagKI=
 github.com/wjfn/DecentralizedABE2020 v1.2.0 h1:XRFhOEhRyJCzhBnmZNM++0mC78Ye7sNpGKsRmor0iqg=
 github.com/wjfn/DecentralizedABE2020 v1.2.0/go.mod h1:02UU/J97iHA+ERwyzQ1bh/CTOex6AbbRrAhUI8ZagKI=
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c/go.mod h1:lB8K/P019DLNhemzwFU4jHLhdvlE6uDZjXFejJXr49I=
@@ -481,6 +484,7 @@ google.golang.org/protobuf v1.23.0/go.mod h1:EGpADcykh3NcUnDUJcl1+ZksZNG86OlYog2
 gopkg.in/airbrake/gobrake.v2 v2.0.9/go.mod h1:/h5ZAUhDkGaJfjzjKLSjv6zCL6O0LLBxU4K+aSYdM/U=
 gopkg.in/alecthomas/kingpin.v2 v2.2.6/go.mod h1:FMv+mEhP44yOT+4EoQTLFTRgOQ1FBLkstjWtayDeSgw=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 h1:qIbj1fsPNlZgppZ+VLlY7N33q108Sa+fhmuc+sWQYwY=
 gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 h1:YR8cESwS4TdDjEe65xsg0ogRM/Nc3DYOhEAlW+xobZo=
 gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=

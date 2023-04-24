@@ -100,12 +100,11 @@ type ShareMessageRequest struct {
 	BaseRequest
 	Tags []string `json:"tags"`
 	// 加密内容
-	Content string `json:"content"`
-        FileName string `json:"fileName"`
-        Ip string `json:"ip"`
-        Location string `json:"location"`
-        Policy string `json:"policy"`
-
+	Content  string `json:"content"`
+	FileName string `json:"fileName"`
+	Ip       string `json:"ip"`
+	Location string `json:"location"`
+	Policy   string `json:"policy"`
 }
 
 // 整合请求
@@ -152,4 +151,29 @@ type GetOrgApplyRequest struct {
 	AttrName string                `json:"attrName"`
 	Status   data.ApplyStatus      `json:"status"`
 	Type     constant.OrgApplyType `json:"type"`
+}
+
+// bulletproof保存
+type BulletProofsRequest struct {
+	BaseRequest
+	Tags    []string    `json:"tags"`
+	Pid     string      `json:"pid"`
+	Range   string      `json:"range"`
+	Commit1 data.Commit `json:"commit1"`
+	Commit2 data.Commit `json:"commit2"`
+	Open    string      `json:"open"`
+	//TODO:是否要定义完整？？
+	//ProofFileName string `json:"proofFileName"`
+	Proof    string `json:"proof"`
+	ProofPre string `json:"proofpre"`
+	//BulletProof string `json:"bulletProof"`
+}
+
+// 查询bulletproofs
+type GetBulletProofsRequest struct {
+	Uid      string `json:"uid"`
+	Pid      string `json:"pid"`
+	Tag      string `json:"tag"`
+	PageSize int    `json:"pageSize"`
+	Bookmark string `json:"bookmark"`
 }
