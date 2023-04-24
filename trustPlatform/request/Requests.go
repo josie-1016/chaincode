@@ -100,12 +100,11 @@ type ShareMessageRequest struct {
 	BaseRequest
 	Tags []string `json:"tags"`
 	// 加密内容
-	Content string `json:"content"`
-        FileName string `json:"fileName"`
-        Ip string `json:"ip"`
-        Location string `json:"location"`
-        Policy string `json:"policy"`
-
+	Content  string `json:"content"`
+	FileName string `json:"fileName"`
+	Ip       string `json:"ip"`
+	Location string `json:"location"`
+	Policy   string `json:"policy"`
 }
 
 // 整合请求
@@ -152,4 +151,21 @@ type GetOrgApplyRequest struct {
 	AttrName string                `json:"attrName"`
 	Status   data.ApplyStatus      `json:"status"`
 	Type     constant.OrgApplyType `json:"type"`
+}
+
+// 上传SM2密文申请
+type ShareSM2MessageRequest struct {
+	BaseRequest
+	// 加密内容
+	Content  string `json:"content"`
+	FileName string `json:"fileName"`
+	ToName   string `json:"toName"`
+}
+
+// 查询分享SM2信息
+type GetSharedSM2MessageRequest struct {
+	FromUid  string `json:"fromUid"`
+	ToName   string `json:"toName"`
+	PageSize int    `json:"pageSize"`
+	Bookmark string `json:"bookmark"`
 }

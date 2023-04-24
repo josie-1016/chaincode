@@ -65,6 +65,7 @@ func declareAttrApply(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 
 	// 反序列化请求，验签
 	var requestStr = args[0]
+	log.Println(requestStr)
 	applyRequest := new(request.DeclareOrgAttrApplyRequest)
 	if err := json.Unmarshal([]byte(requestStr), applyRequest); err != nil {
 		return shim.Error(err.Error())
@@ -76,6 +77,12 @@ func declareAttrApply(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 	uid := applyRequest.Uid
 	orgId := applyRequest.OrgId
 	attrName := applyRequest.AttrName
+	log.Println(uid)
+	// zhuhai1
+	log.Println(orgId)
+	// org4
+	log.Println(attrName)
+	// org4:test
 
 	// 检查attr name
 	if err := utils.CheckAttr(attrName, orgId); err != nil {
@@ -83,18 +90,21 @@ func declareAttrApply(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 	}
 	// org 是否存在
 	org, err := data.QueryOrgByOid(orgId, stub)
+	// stub.GetState("ID:org4"）
 	if err != nil {
 		log.Println(err.Error())
 		return shim.Error(err.Error())
 	}
 	// 检查attr name是否存在
 	attr, _ := data.QueryAttr(attrName, stub)
+	// stub.GetState("ATTR:org4:test")
 	if attr != nil {
 		log.Println("already has this attr:" + attrName)
 		return shim.Error("already has this attr:" + attrName)
 	}
 	// 检查是否存在对相同attrName的Pending apply请求存在，即有效请求
-	apply, err := data.QueryDeclareOrgAttrApply(orgId, data.Pending, stub)
+	apply, err := data.QueryDeclareOrgAttrApply(attrName, data.Pending, stub)
+	// {"selector":{"docType":"orgApply","attrName":"org4:test","type":1,"status":{"$lt":"2"}}}
 	if err != nil {
 		log.Println(err.Error())
 		return shim.Error(err.Error())
@@ -107,6 +117,7 @@ func declareAttrApply(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 	// 保存
 	newApply := data.NewOrgApply(orgId, uid, org.UidSet, org.T, org.N, constant.DeclareAttr, attrName)
 	if err := data.SaveOrgApply(newApply, stub); err != nil {
+		//stub.PutState("ORG_APPLY:org4:zhuhai1")
 		log.Println(err.Error())
 		return shim.Error(err.Error())
 	}
@@ -129,6 +140,7 @@ func queryOrgApply(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	var err error
 	if getOrgApplyRequest.Type == constant.CreateOrg {
 		apply, err = data.QueryCreateOrgApply(getOrgApplyRequest.OrgId, getOrgApplyRequest.Status, stub)
+		// {"selector":{"docType":"orgApply","orgId":"org4","type":0,"status":{"$lt":"4"}}}
 		log.Println(apply)
 	} else {
 		apply, err = data.QueryDeclareOrgAttrApply(getOrgApplyRequest.AttrName, getOrgApplyRequest.Status, stub)
