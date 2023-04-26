@@ -106,3 +106,25 @@ func QueryBulletProofs(uid string, pid string, stub shim.ChaincodeStubInterface)
 	}
 	return
 }
+
+func QueryCommits(uid string, pids []string, stub shim.ChaincodeStubInterface) (resBytes []byte, err error) {
+	log.Println("query Commits by uid:" + uid)
+	var commits []Commit
+	for _, pid := range pids {
+		bytes, err := stub.GetState(constant.BulletProofs + uid + pid)
+		if err != nil {
+			return nil, err
+		}
+		bp := new(BulletProofs)
+
+		if err = json.Unmarshal(bytes, &bp); err != nil {
+			return nil, err
+		}
+		commits = append(commits, bp.Commit1)
+	}
+	resBytes, err = json.Marshal(commits)
+	if err != nil {
+		return nil, err
+	}
+	return
+}

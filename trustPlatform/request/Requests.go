@@ -177,3 +177,9 @@ type GetBulletProofsRequest struct {
 	PageSize int    `json:"pageSize"`
 	Bookmark string `json:"bookmark"`
 }
+
+// 查询commits
+type GetCommitsRequest struct {
+	Uid  string   `json:"uid"`
+	Pids []string `json:"pids"`
+}

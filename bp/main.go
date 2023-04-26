@@ -3,8 +3,6 @@ package main
 import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
-	//"github.com/josie-1016/bullet/rangproof"
-	"bullet/rangproof"
 	"log"
 	"strings"
 )
@@ -38,7 +36,7 @@ func (b *BPCC) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	//user.Init(stub)
 	//d.Dabe = new(DecentralizedABE.DABE)
 	//d.Dabe.GlobalSetup()
-	rangproof.NewECPrimeGroupKey(64)
+
 	return shim.Success([]byte("Init success"))
 }
 
@@ -58,8 +56,6 @@ func (b *BPCC) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return b.create(stub, args)
 	} else if strings.HasPrefix(function, "/verify") {
 		return b.verify(stub, args)
-	} else if strings.HasPrefix(function, "/createBatch") {
-		return b.createBatch(stub, args)
 	} else if strings.HasPrefix(function, "/commit") {
 		return b.commit(stub, args)
 	}

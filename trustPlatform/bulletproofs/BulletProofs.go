@@ -6,6 +6,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 	"log"
+	"strings"
 	"trustPlatform/data"
 	"trustPlatform/request"
 	"trustPlatform/utils"
@@ -35,6 +36,8 @@ func Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return createBulletProofs(stub, args)
 	} else if function == "/zk/getZKs" {
 		return getBulletProofs(stub, args)
+	} else if function == "/zk/getCommits" {
+		return getCommits(stub, args)
 	}
 	return shim.Error("Invalid invoke function name. Expecting \"/org/createOrgApply\" \"/org/approveOrgApply\" " +
 		"\"/org/shareSecret\" \"/org/getSharedSecret\" \"/org/submitPartPK\" \"/org/mixPartPK\"" +
@@ -59,7 +62,23 @@ func getBulletProofs(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	}
 	return shim.Success(result)
 }
+func getCommits(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	log.Println("get bulletproofs")
+	var requestStr = args[0]
+	log.Println(requestStr)
+	getRequest := new(request.GetCommitsRequest)
+	if err := json.Unmarshal([]byte(requestStr), getRequest); err != nil {
+		log.Println(err)
+		return shim.Error(err.Error())
+	}
 
+	result, err := data.QueryCommits(getRequest.Uid, getRequest.Pids, stub)
+	if err != nil {
+		log.Println(err)
+		return shim.Error(err.Error())
+	}
+	return shim.Success(result)
+}
 func createBulletProofs(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	//如果存proof，要先找到之前存commit的地方，修改proof
 	log.Println("create new bulletproofs")
@@ -77,8 +96,10 @@ func createBulletProofs(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	if len(createRequest.Tags) > 10 {
 		return shim.Error("too much tags")
 	}
+	pids := strings.Split(createRequest.Pid, ",")
 	//TODO:saveCommit也用这个？只有uid，commit1和tags
-	if createRequest.Range == "" {
+	if createRequest.Range == "" || len(pids) > 1 {
+		log.Println(pids)
 		message := data.NewBulletProofs(createRequest.Uid, createRequest.Pid, createRequest.Tags, createRequest.Timestamp, createRequest.Range, createRequest.Commit1, createRequest.Commit2, createRequest.Open, createRequest.Proof, createRequest.ProofPre)
 		if err := data.SaveBulletProofs(message, stub); err != nil {
 			log.Println(err)
