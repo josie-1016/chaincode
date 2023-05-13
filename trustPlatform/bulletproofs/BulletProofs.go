@@ -54,7 +54,6 @@ func getBulletProofs(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 		log.Println(err)
 		return shim.Error(err.Error())
 	}
-
 	result, err := data.GetBulletProofs(getRequest.Uid, getRequest.Pid, getRequest.Tag, getRequest.PageSize, getRequest.Bookmark, stub)
 	if err != nil {
 		log.Println(err)
@@ -63,7 +62,7 @@ func getBulletProofs(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	return shim.Success(result)
 }
 func getCommits(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	log.Println("get bulletproofs")
+	log.Println("get commits")
 	var requestStr = args[0]
 	log.Println(requestStr)
 	getRequest := new(request.GetCommitsRequest)
@@ -97,15 +96,21 @@ func createBulletProofs(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 		return shim.Error("too much tags")
 	}
 	pids := strings.Split(createRequest.Pid, ",")
-	//TODO:saveCommit也用这个？只有uid，commit1和tags
+	//saveCommit
 	if createRequest.Range == "" || len(pids) > 1 {
 		log.Println(pids)
-		message := data.NewBulletProofs(createRequest.Uid, createRequest.Pid, createRequest.Tags, createRequest.Timestamp, createRequest.Range, createRequest.Commit1, createRequest.Commit2, createRequest.Open, createRequest.Proof, createRequest.ProofPre)
+		message := new(data.BulletProofs)
+		if len(pids) > 1 {
+			message = data.NewBulletProofs(createRequest.Uid, createRequest.Pid, createRequest.Tags, "", createRequest.Timestamp, createRequest.Range, createRequest.Commit1, createRequest.Commit2, createRequest.Open, createRequest.Proof, createRequest.ProofPre)
+		} else {
+			message = data.NewBulletProofs(createRequest.Uid, createRequest.Pid, createRequest.Tags, createRequest.Timestamp, "", createRequest.Range, createRequest.Commit1, createRequest.Commit2, createRequest.Open, createRequest.Proof, createRequest.ProofPre)
+		}
 		if err := data.SaveBulletProofs(message, stub); err != nil {
 			log.Println(err)
 			return shim.Error(err.Error())
 		}
 	} else {
+		//saveProof
 		proof, err := data.QueryBulletProofs(createRequest.Uid, createRequest.Pid, stub)
 		if err != nil {
 			log.Println(err)
@@ -114,6 +119,7 @@ func createBulletProofs(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 		proof.Range = createRequest.Range
 		proof.Proof = createRequest.Proof
 		proof.Commit2 = createRequest.Commit2
+		proof.Timestamp2 = createRequest.Timestamp
 		if err := data.SaveBulletProofs(proof, stub); err != nil {
 			log.Println(err)
 			return shim.Error(err.Error())
