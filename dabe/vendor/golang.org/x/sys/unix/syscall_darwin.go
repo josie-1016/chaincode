@@ -13,11 +13,15 @@
 package unix
 
 import (
+<<<<<<< HEAD
 	"errors"
+=======
+>>>>>>> guomi
 	"syscall"
 	"unsafe"
 )
 
+<<<<<<< HEAD
 const ImplementsGetwd = true
 
 func Getwd() (string, error) {
@@ -36,6 +40,8 @@ func Getwd() (string, error) {
 	return "", ENOTSUP
 }
 
+=======
+>>>>>>> guomi
 // SockaddrDatalink implements the Sockaddr interface for AF_LINK type sockets.
 type SockaddrDatalink struct {
 	Len    uint8
@@ -49,6 +55,14 @@ type SockaddrDatalink struct {
 	raw    RawSockaddrDatalink
 }
 
+<<<<<<< HEAD
+=======
+// Some external packages rely on SYS___SYSCTL being defined to implement their
+// own sysctl wrappers. Provide it here, even though direct syscalls are no
+// longer supported on darwin.
+const SYS___SYSCTL = 202
+
+>>>>>>> guomi
 // Translate "kern.hostname" to []_C_int{0,1,2,3}.
 func nametomib(name string) (mib []_C_int, err error) {
 	const siz = unsafe.Sizeof(mib[0])
@@ -92,11 +106,14 @@ func direntNamlen(buf []byte) (uint64, bool) {
 func PtraceAttach(pid int) (err error) { return ptrace(PT_ATTACH, pid, 0, 0) }
 func PtraceDetach(pid int) (err error) { return ptrace(PT_DETACH, pid, 0, 0) }
 
+<<<<<<< HEAD
 const (
 	attrBitMapCount = 5
 	attrCmnFullpath = 0x08000000
 )
 
+=======
+>>>>>>> guomi
 type attrList struct {
 	bitmapCount uint16
 	_           uint16
@@ -107,6 +124,7 @@ type attrList struct {
 	Forkattr    uint32
 }
 
+<<<<<<< HEAD
 func getAttrList(path string, attrList attrList, attrBuf []byte, options uint) (attrs [][]byte, err error) {
 	if len(attrBuf) < 4 {
 		return nil, errors.New("attrBuf too small")
@@ -155,6 +173,8 @@ func getAttrList(path string, attrList attrList, attrBuf []byte, options uint) (
 
 //sys getattrlist(path *byte, list unsafe.Pointer, buf unsafe.Pointer, size uintptr, options int) (err error)
 
+=======
+>>>>>>> guomi
 //sysnb pipe() (r int, w int, err error)
 
 func Pipe(p []int) (err error) {
@@ -396,6 +416,11 @@ func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err e
 //sys	Chroot(path string) (err error)
 //sys	ClockGettime(clockid int32, time *Timespec) (err error)
 //sys	Close(fd int) (err error)
+<<<<<<< HEAD
+=======
+//sys	Clonefile(src string, dst string, flags int) (err error)
+//sys	Clonefileat(srcDirfd int, src string, dstDirfd int, dst string, flags int) (err error)
+>>>>>>> guomi
 //sys	Dup(fd int) (nfd int, err error)
 //sys	Dup2(from int, to int) (err error)
 //sys	Exchangedata(path1 string, path2 string, options int) (err error)
@@ -407,10 +432,18 @@ func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err e
 //sys	Fchmodat(dirfd int, path string, mode uint32, flags int) (err error)
 //sys	Fchown(fd int, uid int, gid int) (err error)
 //sys	Fchownat(dirfd int, path string, uid int, gid int, flags int) (err error)
+<<<<<<< HEAD
+=======
+//sys	Fclonefileat(srcDirfd int, dstDirfd int, dst string, flags int) (err error)
+>>>>>>> guomi
 //sys	Flock(fd int, how int) (err error)
 //sys	Fpathconf(fd int, name int) (val int, err error)
 //sys	Fsync(fd int) (err error)
 //sys	Ftruncate(fd int, length int64) (err error)
+<<<<<<< HEAD
+=======
+//sys	Getcwd(buf []byte) (n int, err error)
+>>>>>>> guomi
 //sys	Getdtablesize() (size int)
 //sysnb	Getegid() (egid int)
 //sysnb	Geteuid() (uid int)
@@ -423,6 +456,10 @@ func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err e
 //sysnb	Getrlimit(which int, lim *Rlimit) (err error)
 //sysnb	Getrusage(who int, rusage *Rusage) (err error)
 //sysnb	Getsid(pid int) (sid int, err error)
+<<<<<<< HEAD
+=======
+//sysnb	Gettimeofday(tp *Timeval) (err error)
+>>>>>>> guomi
 //sysnb	Getuid() (uid int)
 //sysnb	Issetugid() (tainted bool)
 //sys	Kqueue() (fd int, err error)

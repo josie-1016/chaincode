@@ -125,9 +125,15 @@ type Statfs_t struct {
 	Owner       uint32
 	Fsid        Fsid
 	Charspare   [80]int8
+<<<<<<< HEAD
 	Fstypename  [16]int8
 	Mntfromname [1024]int8
 	Mntonname   [1024]int8
+=======
+	Fstypename  [16]byte
+	Mntfromname [1024]byte
+	Mntonname   [1024]byte
+>>>>>>> guomi
 }
 
 type statfs_freebsd11_t struct {
@@ -150,9 +156,15 @@ type statfs_freebsd11_t struct {
 	Owner       uint32
 	Fsid        Fsid
 	Charspare   [80]int8
+<<<<<<< HEAD
 	Fstypename  [16]int8
 	Mntfromname [88]int8
 	Mntonname   [88]int8
+=======
+	Fstypename  [16]byte
+	Mntfromname [88]byte
+	Mntonname   [88]byte
+>>>>>>> guomi
 }
 
 type Flock_t struct {

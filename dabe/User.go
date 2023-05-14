@@ -4,7 +4,7 @@ import (
 	"github.com/Nik-U/pbc"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
-	DecentralizedABE "github.com/wjfn/DecentralizedABE2020/model"
+	DecentralizedABE "github.com/vangogo/DecentralizedABE/model"
 	"log"
 	"strconv"
 	"strings"

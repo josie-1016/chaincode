@@ -39,8 +39,10 @@ func QueryCreateOrgApply(orgId string, status ApplyStatus, stub shim.ChaincodeSt
 	}
 	defer resultsIterator.Close()
 
+	log.Println(resultsIterator)
 	if resultsIterator.HasNext() {
 		kv, err := resultsIterator.Next()
+		log.Println(kv)
 		if err != nil {
 			return nil, err
 		}
@@ -48,6 +50,7 @@ func QueryCreateOrgApply(orgId string, status ApplyStatus, stub shim.ChaincodeSt
 			return nil, err
 		}
 
+		log.Println(apply)
 		if err = utils.CheckTimeWithin(apply.CreateTime, 3, time.Hour*24); err != nil {
 			apply.Status = Fail
 			err = SaveOrgApply(apply, stub)

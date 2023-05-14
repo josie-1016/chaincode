@@ -111,6 +111,12 @@ type NewSubConnOptions struct {
 	// CredsBundle is the credentials bundle that will be used in the created
 	// SubConn. If it's nil, the original creds from grpc DialOptions will be
 	// used.
+<<<<<<< HEAD
+=======
+	//
+	// Deprecated: Use the Attributes field in resolver.Address to pass
+	// arbitrary data to the credential handshaker.
+>>>>>>> guomi
 	CredsBundle credentials.Bundle
 	// HealthCheckEnabled indicates whether health check service should be
 	// enabled on this SubConn
@@ -123,7 +129,11 @@ type State struct {
 	// determine the state of the ClientConn.
 	ConnectivityState connectivity.State
 	// Picker is used to choose connections (SubConns) for RPCs.
+<<<<<<< HEAD
 	Picker V2Picker
+=======
+	Picker Picker
+>>>>>>> guomi
 }
 
 // ClientConn represents a gRPC ClientConn.
@@ -141,6 +151,7 @@ type ClientConn interface {
 	// The SubConn will be shutdown.
 	RemoveSubConn(SubConn)
 
+<<<<<<< HEAD
 	// UpdateBalancerState is called by balancer to notify gRPC that some internal
 	// state in balancer has changed.
 	//
@@ -155,6 +166,13 @@ type ClientConn interface {
 	//
 	// gRPC will update the connectivity state of the ClientConn, and will call pick
 	// on the new picker to pick new SubConns.
+=======
+	// UpdateState notifies gRPC that the balancer's internal state has
+	// changed.
+	//
+	// gRPC will update the connectivity state of the ClientConn, and will call
+	// Pick on the new Picker to pick new SubConns.
+>>>>>>> guomi
 	UpdateState(State)
 
 	// ResolveNow is called by balancer to notify gRPC to do a name resolving.
@@ -232,6 +250,7 @@ type DoneInfo struct {
 
 var (
 	// ErrNoSubConnAvailable indicates no SubConn is available for pick().
+<<<<<<< HEAD
 	// gRPC will block the RPC until a new picker is available via UpdateBalancerState().
 	ErrNoSubConnAvailable = errors.New("no SubConn is available")
 	// ErrTransientFailure indicates all SubConns are in TransientFailure.
@@ -281,6 +300,18 @@ type Picker interface {
 	// doesn't care about the RPC status.
 	Pick(ctx context.Context, info PickInfo) (conn SubConn, done func(DoneInfo), err error)
 }
+=======
+	// gRPC will block the RPC until a new picker is available via UpdateState().
+	ErrNoSubConnAvailable = errors.New("no SubConn is available")
+	// ErrTransientFailure indicates all SubConns are in TransientFailure.
+	// WaitForReady RPCs will block, non-WaitForReady RPCs will fail.
+	//
+	// Deprecated: return an appropriate error based on the last resolution or
+	// connection attempt instead.  The behavior is the same for any non-gRPC
+	// status error.
+	ErrTransientFailure = errors.New("all SubConns are in TransientFailure")
+)
+>>>>>>> guomi
 
 // PickResult contains information related to a connection chosen for an RPC.
 type PickResult struct {
@@ -297,6 +328,7 @@ type PickResult struct {
 	Done func(DoneInfo)
 }
 
+<<<<<<< HEAD
 type transientFailureError struct {
 	error
 }
@@ -315,6 +347,21 @@ func TransientFailureError(err error) error {
 //
 // The pickers used by gRPC can be updated by ClientConn.UpdateBalancerState().
 type V2Picker interface {
+=======
+// TransientFailureError returns e.  It exists for backward compatibility and
+// will be deleted soon.
+//
+// Deprecated: no longer necessary, picker errors are treated this way by
+// default.
+func TransientFailureError(e error) error { return e }
+
+// Picker is used by gRPC to pick a SubConn to send an RPC.
+// Balancer is expected to generate a new picker from its snapshot every time its
+// internal state has changed.
+//
+// The pickers used by gRPC can be updated by ClientConn.UpdateState().
+type Picker interface {
+>>>>>>> guomi
 	// Pick returns the connection to use for this RPC and related information.
 	//
 	// Pick should not block.  If the balancer needs to do I/O or any blocking
@@ -327,6 +374,7 @@ type V2Picker interface {
 	// - If the error is ErrNoSubConnAvailable, gRPC will block until a new
 	//   Picker is provided by the balancer (using ClientConn.UpdateState).
 	//
+<<<<<<< HEAD
 	// - If the error implements IsTransientFailure() bool, returning true,
 	//   wait for ready RPCs will wait, but non-wait for ready RPCs will be
 	//   terminated with this error's Error() string and status code
@@ -335,6 +383,15 @@ type V2Picker interface {
 	// - Any other errors terminate all RPCs with the code and message
 	//   provided.  If the error is not a status error, it will be converted by
 	//   gRPC to a status error with code Unknown.
+=======
+	// - If the error is a status error (implemented by the grpc/status
+	//   package), gRPC will terminate the RPC with the code and message
+	//   provided.
+	//
+	// - For all other errors, wait for ready RPCs will wait, but non-wait for
+	//   ready RPCs will be terminated with this error's Error() string and
+	//   status code Unavailable.
+>>>>>>> guomi
 	Pick(info PickInfo) (PickResult, error)
 }
 
@@ -343,6 +400,7 @@ type V2Picker interface {
 //
 // It also generates and updates the Picker used by gRPC to pick SubConns for RPCs.
 //
+<<<<<<< HEAD
 // HandleSubConnectionStateChange, HandleResolvedAddrs and Close are guaranteed
 // to be called synchronously from the same goroutine.
 // There's no guarantee on picker.Pick, it may be called anytime.
@@ -366,6 +424,23 @@ type Balancer interface {
 	// Deprecated: if V2Balancer is implemented by the Balancer,
 	// UpdateClientConnState will be called instead.
 	HandleResolvedAddrs([]resolver.Address, error)
+=======
+// UpdateClientConnState, ResolverError, UpdateSubConnState, and Close are
+// guaranteed to be called synchronously from the same goroutine.  There's no
+// guarantee on picker.Pick, it may be called anytime.
+type Balancer interface {
+	// UpdateClientConnState is called by gRPC when the state of the ClientConn
+	// changes.  If the error returned is ErrBadResolverState, the ClientConn
+	// will begin calling ResolveNow on the active name resolver with
+	// exponential backoff until a subsequent call to UpdateClientConnState
+	// returns a nil error.  Any other errors are currently ignored.
+	UpdateClientConnState(ClientConnState) error
+	// ResolverError is called by gRPC when the name resolver reports an error.
+	ResolverError(error)
+	// UpdateSubConnState is called by gRPC when the state of a SubConn
+	// changes.
+	UpdateSubConnState(SubConn, SubConnState)
+>>>>>>> guomi
 	// Close closes the balancer. The balancer is not required to call
 	// ClientConn.RemoveSubConn for its existing SubConns.
 	Close()
@@ -393,6 +468,7 @@ type ClientConnState struct {
 // problem with the provided name resolver data.
 var ErrBadResolverState = errors.New("bad resolver state")
 
+<<<<<<< HEAD
 // V2Balancer is defined for documentation purposes.  If a Balancer also
 // implements V2Balancer, its UpdateClientConnState method will be called
 // instead of HandleResolvedAddrs and its UpdateSubConnState will be called
@@ -414,6 +490,8 @@ type V2Balancer interface {
 	Close()
 }
 
+=======
+>>>>>>> guomi
 // ConnectivityStateEvaluator takes the connectivity states of multiple SubConns
 // and returns one aggregated connectivity state.
 //

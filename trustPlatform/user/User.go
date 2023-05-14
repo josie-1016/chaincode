@@ -162,7 +162,7 @@ func getAttrApply(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	bytesArray, err := data.QueryUserAttrApplyBytes(applyRequest.FromUid, applyRequest.ToUid, applyRequest.ToOrgId, applyRequest.Status, stub)
 	log.Println(bytesArray)
 	log.Println("endendend")
-        if err != nil {
+	if err != nil {
 		return shim.Error(err.Error())
 	}
 	buffer := utils.GetListResponse(bytesArray)
@@ -259,41 +259,30 @@ func getUser(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 func create(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	log.Println("create new user start")
 
-
 	var requestStr = args[0]
-	log.Println("argsargsargsargs")
-	log.Println(requestStr)
-	log.Println("args end!!!!")
 	initRequest := new(request.UserInitRequest)
 	if err := json.Unmarshal([]byte(requestStr), initRequest); err != nil {
 		log.Println(err.Error())
 		return shim.Error(err.Error())
 	}
 	pj, err := utils.GetRequestParamJson([]byte(requestStr))
-//        _, err := utils.GetRequestParamJson([]byte(requestStr))
 	if err != nil {
 		log.Println(err.Error())
 		return shim.Error(err.Error())
 	}
-	log.Println("111111111111111111111111111111111111111111111")
-	if err = utils.VerifySign(string(pj), initRequest.PublicKey, initRequest.Sign); err != nil {
-			log.Println(err.Error())
+	if err = utils.VerifySign(string(pj), initRequest.PublicKey, initRequest.Sign, initRequest.Uid); err != nil {
+		log.Println(err.Error())
 		return shim.Error(err.Error())
 	}
-	log.Println("222222222222222222222222222222")
 
 	uid := initRequest.Uid
-	log.Println("uiduiduid")
-	log.Println(uid)
 	publicKey := initRequest.PublicKey
 	upk := initRequest.UPK
 
-	log.Println("222222222222222222222222")
 	//if err := utils.CheckId(uid); err != nil {
 	//	log.Println(err.Error())
 	//	return shim.Error(err.Error())
 	//}
-	log.Println("22222222222222222222222")
 
 	if utils.ExistId(uid, stub) {
 		log.Printf("uid %s already exists\n", uid)
@@ -310,16 +299,12 @@ func create(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error("publicKey already exists")
 	}
 
-	log.Println("useruser")
 	user = data.NewUser(uid, publicKey, upk)
 	log.Println(user)
-	log.Println("33333333333333333333333333333")
 	if err = data.SaveUser(user, stub); err != nil {
 		log.Println(err.Error())
 		return shim.Error(err.Error())
 	}
-	log.Println("333333333333333333333")
-
 	return shim.Success(nil)
 }
 
@@ -366,7 +351,7 @@ func declareAttr(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error("don't have this user")
 	}
 
-	if err = utils.VerifySign(string(pj), user.PublicKey, sign); err != nil {
+	if err = utils.VerifySign(string(pj), user.PublicKey, sign, uid); err != nil {
 		return shim.Error(err.Error())
 	}
 
@@ -405,7 +390,7 @@ func preCheckRequest(requestStr string, uid, sign string, stub shim.ChaincodeStu
 		log.Println("don't have requestUser with uid " + uid)
 		return ecode.Error(ecode.RequestErr, "don't have this requestUser")
 	}
-	if err = utils.VerifySign(string(requestJson), requestUser.PublicKey, sign); err != nil {
+	if err = utils.VerifySign(string(requestJson), requestUser.PublicKey, sign, uid); err != nil {
 		log.Println(err)
 		return err
 	}

@@ -35,11 +35,20 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/metadata"
+<<<<<<< HEAD
+=======
+	"google.golang.org/grpc/resolver"
+>>>>>>> guomi
 	"google.golang.org/grpc/stats"
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/tap"
 )
 
+<<<<<<< HEAD
+=======
+const logLevel = 2
+
+>>>>>>> guomi
 type bufferPool struct {
 	pool sync.Pool
 }
@@ -568,6 +577,7 @@ type ConnectOptions struct {
 	MaxHeaderListSize *uint32
 }
 
+<<<<<<< HEAD
 // TargetInfo contains the information of the target such as network address and metadata.
 type TargetInfo struct {
 	Addr      string
@@ -579,6 +589,12 @@ type TargetInfo struct {
 // and returns it to the caller.
 func NewClientTransport(connectCtx, ctx context.Context, target TargetInfo, opts ConnectOptions, onPrefaceReceipt func(), onGoAway func(GoAwayReason), onClose func()) (ClientTransport, error) {
 	return newHTTP2Client(connectCtx, ctx, target, opts, onPrefaceReceipt, onGoAway, onClose)
+=======
+// NewClientTransport establishes the transport with the required ConnectOptions
+// and returns it to the caller.
+func NewClientTransport(connectCtx, ctx context.Context, addr resolver.Address, opts ConnectOptions, onPrefaceReceipt func(), onGoAway func(GoAwayReason), onClose func()) (ClientTransport, error) {
+	return newHTTP2Client(connectCtx, ctx, addr, opts, onPrefaceReceipt, onGoAway, onClose)
+>>>>>>> guomi
 }
 
 // Options provides additional hints and information for message

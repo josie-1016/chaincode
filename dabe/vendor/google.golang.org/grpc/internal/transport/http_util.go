@@ -37,6 +37,11 @@ import (
 	"golang.org/x/net/http2/hpack"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
+<<<<<<< HEAD
+=======
+	"google.golang.org/grpc/grpclog"
+	"google.golang.org/grpc/internal/grpcutil"
+>>>>>>> guomi
 	"google.golang.org/grpc/status"
 )
 
@@ -50,7 +55,11 @@ const (
 	// "proto" as a suffix after "+" or ";".  See
 	// https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md#requests
 	// for more details.
+<<<<<<< HEAD
 	baseContentType = "application/grpc"
+=======
+
+>>>>>>> guomi
 )
 
 var (
@@ -97,6 +106,10 @@ var (
 		// 504 Gateway timeout - UNAVAILABLE.
 		http.StatusGatewayTimeout: codes.Unavailable,
 	}
+<<<<<<< HEAD
+=======
+	logger = grpclog.Component("transport")
+>>>>>>> guomi
 )
 
 type parsedHeaderData struct {
@@ -182,6 +195,7 @@ func isWhitelistedHeader(hdr string) bool {
 	}
 }
 
+<<<<<<< HEAD
 // contentSubtype returns the content-subtype for the given content-type.  The
 // given content-type must be a valid content-type that starts with
 // "application/grpc". A content-subtype will follow "application/grpc" after a
@@ -222,6 +236,8 @@ func contentType(contentSubtype string) string {
 	return baseContentType + "+" + contentSubtype
 }
 
+=======
+>>>>>>> guomi
 func (d *decodeState) status() *status.Status {
 	if d.data.statusGen == nil {
 		// No status-details were provided; generate status using code/msg.
@@ -340,7 +356,11 @@ func (d *decodeState) addMetadata(k, v string) {
 func (d *decodeState) processHeaderField(f hpack.HeaderField) {
 	switch f.Name {
 	case "content-type":
+<<<<<<< HEAD
 		contentSubtype, validContentType := contentSubtype(f.Value)
+=======
+		contentSubtype, validContentType := grpcutil.ContentSubtype(f.Value)
+>>>>>>> guomi
 		if !validContentType {
 			d.data.contentTypeErr = fmt.Sprintf("transport: received the unexpected content-type %q", f.Value)
 			return
@@ -412,7 +432,13 @@ func (d *decodeState) processHeaderField(f hpack.HeaderField) {
 		}
 		v, err := decodeMetadataHeader(f.Name, f.Value)
 		if err != nil {
+<<<<<<< HEAD
 			errorf("Failed to decode metadata header (%q, %q): %v", f.Name, f.Value, err)
+=======
+			if logger.V(logLevel) {
+				logger.Errorf("Failed to decode metadata header (%q, %q): %v", f.Name, f.Value, err)
+			}
+>>>>>>> guomi
 			return
 		}
 		d.addMetadata(f.Name, v)
@@ -449,6 +475,7 @@ func timeoutUnitToDuration(u timeoutUnit) (d time.Duration, ok bool) {
 	return
 }
 
+<<<<<<< HEAD
 const maxTimeoutValue int64 = 100000000 - 1
 
 // div does integer division and round-up the result. Note that this is
@@ -484,6 +511,8 @@ func encodeTimeout(t time.Duration) string {
 	return strconv.FormatInt(div(t, time.Hour), 10) + "H"
 }
 
+=======
+>>>>>>> guomi
 func decodeTimeout(s string) (time.Duration, error) {
 	size := len(s)
 	if size < 2 {

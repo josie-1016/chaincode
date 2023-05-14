@@ -141,6 +141,7 @@ func Getdirentries(fd int, buf []byte, basep *uintptr) (n int, err error) {
 	return
 }
 
+<<<<<<< HEAD
 const ImplementsGetwd = true
 
 //sys	Getcwd(buf []byte) (n int, err error) = SYS___GETCWD
@@ -158,6 +159,10 @@ func Getwd() (string, error) {
 	return string(buf[:n]), nil
 }
 
+=======
+//sys	Getcwd(buf []byte) (n int, err error) = SYS___GETCWD
+
+>>>>>>> guomi
 // TODO
 func sendfile(outfd int, infd int, offset *int64, count int) (written int, err error) {
 	return -1, ENOSYS

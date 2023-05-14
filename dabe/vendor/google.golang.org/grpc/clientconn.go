@@ -68,8 +68,11 @@ var (
 	errConnDrain = errors.New("grpc: the connection is drained")
 	// errConnClosing indicates that the connection is closing.
 	errConnClosing = errors.New("grpc: the connection is closing")
+<<<<<<< HEAD
 	// errBalancerClosed indicates that the balancer is closed.
 	errBalancerClosed = errors.New("grpc: balancer is closed")
+=======
+>>>>>>> guomi
 	// invalidDefaultServiceConfigErrPrefix is used to prefix the json parsing error for the default
 	// service config.
 	invalidDefaultServiceConfigErrPrefix = "grpc: the provided default service config is invalid"
@@ -151,7 +154,11 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 	if channelz.IsOn() {
 		if cc.dopts.channelzParentID != 0 {
 			cc.channelzID = channelz.RegisterChannel(&channelzChannel{cc}, cc.dopts.channelzParentID, target)
+<<<<<<< HEAD
 			channelz.AddTraceEvent(cc.channelzID, 0, &channelz.TraceEventDesc{
+=======
+			channelz.AddTraceEvent(logger, cc.channelzID, 0, &channelz.TraceEventDesc{
+>>>>>>> guomi
 				Desc:     "Channel Created",
 				Severity: channelz.CtINFO,
 				Parent: &channelz.TraceEventDesc{
@@ -161,7 +168,11 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 			})
 		} else {
 			cc.channelzID = channelz.RegisterChannel(&channelzChannel{cc}, 0, target)
+<<<<<<< HEAD
 			channelz.Info(cc.channelzID, "Channel Created")
+=======
+			channelz.Info(logger, cc.channelzID, "Channel Created")
+>>>>>>> guomi
 		}
 		cc.csMgr.channelzID = cc.channelzID
 	}
@@ -217,7 +228,18 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 	defer func() {
 		select {
 		case <-ctx.Done():
+<<<<<<< HEAD
 			conn, err = nil, ctx.Err()
+=======
+			switch {
+			case ctx.Err() == err:
+				conn = nil
+			case err == nil || !cc.dopts.returnLastError:
+				conn, err = nil, ctx.Err()
+			default:
+				conn, err = nil, fmt.Errorf("%v: %v", ctx.Err(), err)
+			}
+>>>>>>> guomi
 		default:
 		}
 	}()
@@ -240,13 +262,22 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 
 	// Determine the resolver to use.
 	cc.parsedTarget = grpcutil.ParseTarget(cc.target)
+<<<<<<< HEAD
 	channelz.Infof(cc.channelzID, "parsed scheme: %q", cc.parsedTarget.Scheme)
+=======
+	unixScheme := strings.HasPrefix(cc.target, "unix:")
+	channelz.Infof(logger, cc.channelzID, "parsed scheme: %q", cc.parsedTarget.Scheme)
+>>>>>>> guomi
 	resolverBuilder := cc.getResolver(cc.parsedTarget.Scheme)
 	if resolverBuilder == nil {
 		// If resolver builder is still nil, the parsed target's scheme is
 		// not registered. Fallback to default resolver and set Endpoint to
 		// the original target.
+<<<<<<< HEAD
 		channelz.Infof(cc.channelzID, "scheme %q not registered, fallback to default scheme", cc.parsedTarget.Scheme)
+=======
+		channelz.Infof(logger, cc.channelzID, "scheme %q not registered, fallback to default scheme", cc.parsedTarget.Scheme)
+>>>>>>> guomi
 		cc.parsedTarget = resolver.Target{
 			Scheme:   resolver.GetDefaultScheme(),
 			Endpoint: target,
@@ -262,6 +293,11 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 		cc.authority = creds.Info().ServerName
 	} else if cc.dopts.insecure && cc.dopts.authority != "" {
 		cc.authority = cc.dopts.authority
+<<<<<<< HEAD
+=======
+	} else if unixScheme {
+		cc.authority = "localhost"
+>>>>>>> guomi
 	} else {
 		// Use endpoint from "scheme://authority/endpoint" as the default
 		// authority for ClientConn.
@@ -311,7 +347,11 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 			if s == connectivity.Ready {
 				break
 			} else if cc.dopts.copts.FailOnNonTempDialError && s == connectivity.TransientFailure {
+<<<<<<< HEAD
 				if err = cc.blockingpicker.connectionError(); err != nil {
+=======
+				if err = cc.connectionError(); err != nil {
+>>>>>>> guomi
 					terr, ok := err.(interface {
 						Temporary() bool
 					})
@@ -322,6 +362,12 @@ func DialContext(ctx context.Context, target string, opts ...DialOption) (conn *
 			}
 			if !cc.WaitForStateChange(ctx, s) {
 				// ctx got timeout or canceled.
+<<<<<<< HEAD
+=======
+				if err = cc.connectionError(); err != nil && cc.dopts.returnLastError {
+					return nil, err
+				}
+>>>>>>> guomi
 				return nil, ctx.Err()
 			}
 		}
@@ -414,7 +460,11 @@ func (csm *connectivityStateManager) updateState(state connectivity.State) {
 		return
 	}
 	csm.state = state
+<<<<<<< HEAD
 	channelz.Infof(csm.channelzID, "Channel Connectivity change to %v", state)
+=======
+	channelz.Infof(logger, csm.channelzID, "Channel Connectivity change to %v", state)
+>>>>>>> guomi
 	if csm.notifyChan != nil {
 		// There are other goroutines waiting on this channel.
 		close(csm.notifyChan)
@@ -490,6 +540,12 @@ type ClientConn struct {
 
 	channelzID int64 // channelz unique identification number
 	czData     *channelzData
+<<<<<<< HEAD
+=======
+
+	lceMu               sync.Mutex // protects lastConnectionError
+	lastConnectionError error
+>>>>>>> guomi
 }
 
 // WaitForStateChange waits until the connectivity.State of ClientConn changes from sourceState or
@@ -664,9 +720,15 @@ func (cc *ClientConn) switchBalancer(name string) {
 		return
 	}
 
+<<<<<<< HEAD
 	channelz.Infof(cc.channelzID, "ClientConn switching balancer to %q", name)
 	if cc.dopts.balancerBuilder != nil {
 		channelz.Info(cc.channelzID, "ignoring balancer switching: Balancer DialOption used instead")
+=======
+	channelz.Infof(logger, cc.channelzID, "ClientConn switching balancer to %q", name)
+	if cc.dopts.balancerBuilder != nil {
+		channelz.Info(logger, cc.channelzID, "ignoring balancer switching: Balancer DialOption used instead")
+>>>>>>> guomi
 		return
 	}
 	if cc.balancerWrapper != nil {
@@ -675,11 +737,19 @@ func (cc *ClientConn) switchBalancer(name string) {
 
 	builder := balancer.Get(name)
 	if builder == nil {
+<<<<<<< HEAD
 		channelz.Warningf(cc.channelzID, "Channel switches to new LB policy %q due to fallback from invalid balancer name", PickFirstBalancerName)
 		channelz.Infof(cc.channelzID, "failed to get balancer builder for: %v, using pick_first instead", name)
 		builder = newPickfirstBuilder()
 	} else {
 		channelz.Infof(cc.channelzID, "Channel switches to new LB policy %q", name)
+=======
+		channelz.Warningf(logger, cc.channelzID, "Channel switches to new LB policy %q due to fallback from invalid balancer name", PickFirstBalancerName)
+		channelz.Infof(logger, cc.channelzID, "failed to get balancer builder for: %v, using pick_first instead", name)
+		builder = newPickfirstBuilder()
+	} else {
+		channelz.Infof(logger, cc.channelzID, "Channel switches to new LB policy %q", name)
+>>>>>>> guomi
 	}
 
 	cc.curBalancerName = builder.Name()
@@ -720,7 +790,11 @@ func (cc *ClientConn) newAddrConn(addrs []resolver.Address, opts balancer.NewSub
 	}
 	if channelz.IsOn() {
 		ac.channelzID = channelz.RegisterSubChannel(ac, cc.channelzID, "")
+<<<<<<< HEAD
 		channelz.AddTraceEvent(ac.channelzID, 0, &channelz.TraceEventDesc{
+=======
+		channelz.AddTraceEvent(logger, ac.channelzID, 0, &channelz.TraceEventDesc{
+>>>>>>> guomi
 			Desc:     "Subchannel Created",
 			Severity: channelz.CtINFO,
 			Parent: &channelz.TraceEventDesc{
@@ -818,7 +892,11 @@ func (ac *addrConn) connect() error {
 func (ac *addrConn) tryUpdateAddrs(addrs []resolver.Address) bool {
 	ac.mu.Lock()
 	defer ac.mu.Unlock()
+<<<<<<< HEAD
 	channelz.Infof(ac.channelzID, "addrConn: tryUpdateAddrs curAddr: %v, addrs: %v", ac.curAddr, addrs)
+=======
+	channelz.Infof(logger, ac.channelzID, "addrConn: tryUpdateAddrs curAddr: %v, addrs: %v", ac.curAddr, addrs)
+>>>>>>> guomi
 	if ac.state == connectivity.Shutdown ||
 		ac.state == connectivity.TransientFailure ||
 		ac.state == connectivity.Idle {
@@ -838,7 +916,11 @@ func (ac *addrConn) tryUpdateAddrs(addrs []resolver.Address) bool {
 			break
 		}
 	}
+<<<<<<< HEAD
 	channelz.Infof(ac.channelzID, "addrConn: tryUpdateAddrs curAddrFound: %v", curAddrFound)
+=======
+	channelz.Infof(logger, ac.channelzID, "addrConn: tryUpdateAddrs curAddrFound: %v", curAddrFound)
+>>>>>>> guomi
 	if curAddrFound {
 		ac.addrs = addrs
 	}
@@ -849,9 +931,16 @@ func (ac *addrConn) tryUpdateAddrs(addrs []resolver.Address) bool {
 // GetMethodConfig gets the method config of the input method.
 // If there's an exact match for input method (i.e. /service/method), we return
 // the corresponding MethodConfig.
+<<<<<<< HEAD
 // If there isn't an exact match for the input method, we look for the default config
 // under the service (i.e /service/). If there is a default MethodConfig for
 // the service, we return it.
+=======
+// If there isn't an exact match for the input method, we look for the service's default
+// config under the service (i.e /service/) and then for the default for all services (empty string).
+//
+// If there is a default MethodConfig for the service, we return it.
+>>>>>>> guomi
 // Otherwise, we return an empty MethodConfig.
 func (cc *ClientConn) GetMethodConfig(method string) MethodConfig {
 	// TODO: Avoid the locking here.
@@ -860,12 +949,23 @@ func (cc *ClientConn) GetMethodConfig(method string) MethodConfig {
 	if cc.sc == nil {
 		return MethodConfig{}
 	}
+<<<<<<< HEAD
 	m, ok := cc.sc.Methods[method]
 	if !ok {
 		i := strings.LastIndex(method, "/")
 		m = cc.sc.Methods[method[:i+1]]
 	}
 	return m
+=======
+	if m, ok := cc.sc.Methods[method]; ok {
+		return m
+	}
+	i := strings.LastIndex(method, "/")
+	if m, ok := cc.sc.Methods[method[:i+1]]; ok {
+		return m
+	}
+	return cc.sc.Methods[""]
+>>>>>>> guomi
 }
 
 func (cc *ClientConn) healthCheckConfig() *healthCheckConfig {
@@ -1009,7 +1109,11 @@ func (cc *ClientConn) Close() error {
 				Severity: channelz.CtINFO,
 			}
 		}
+<<<<<<< HEAD
 		channelz.AddTraceEvent(cc.channelzID, 0, ted)
+=======
+		channelz.AddTraceEvent(logger, cc.channelzID, 0, ted)
+>>>>>>> guomi
 		// TraceEvent needs to be called before RemoveEntry, as TraceEvent may add trace reference to
 		// the entity being deleted, and thus prevent it from being deleted right away.
 		channelz.RemoveEntry(cc.channelzID)
@@ -1053,7 +1157,11 @@ func (ac *addrConn) updateConnectivityState(s connectivity.State, lastErr error)
 		return
 	}
 	ac.state = s
+<<<<<<< HEAD
 	channelz.Infof(ac.channelzID, "Subchannel Connectivity change to %v", s)
+=======
+	channelz.Infof(logger, ac.channelzID, "Subchannel Connectivity change to %v", s)
+>>>>>>> guomi
 	ac.cc.handleSubConnStateChange(ac.acbw, s, lastErr)
 }
 
@@ -1190,7 +1298,11 @@ func (ac *addrConn) tryAllAddrs(addrs []resolver.Address, connectDeadline time.T
 		}
 		ac.mu.Unlock()
 
+<<<<<<< HEAD
 		channelz.Infof(ac.channelzID, "Subchannel picks a new address %q to connect", addr.Addr)
+=======
+		channelz.Infof(logger, ac.channelzID, "Subchannel picks a new address %q to connect", addr.Addr)
+>>>>>>> guomi
 
 		newTr, reconnect, err := ac.createTransport(addr, copts, connectDeadline)
 		if err == nil {
@@ -1199,7 +1311,11 @@ func (ac *addrConn) tryAllAddrs(addrs []resolver.Address, connectDeadline time.T
 		if firstConnErr == nil {
 			firstConnErr = err
 		}
+<<<<<<< HEAD
 		ac.cc.blockingpicker.updateConnectionError(err)
+=======
+		ac.cc.updateConnectionError(err)
+>>>>>>> guomi
 	}
 
 	// Couldn't connect to any address.
@@ -1214,6 +1330,7 @@ func (ac *addrConn) createTransport(addr resolver.Address, copts transport.Conne
 	onCloseCalled := make(chan struct{})
 	reconnect := grpcsync.NewEvent()
 
+<<<<<<< HEAD
 	authority := ac.cc.authority
 	// addr.ServerName takes precedent over ClientConn authority, if present.
 	if addr.ServerName != "" {
@@ -1224,6 +1341,11 @@ func (ac *addrConn) createTransport(addr resolver.Address, copts transport.Conne
 		Addr:      addr.Addr,
 		Metadata:  addr.Metadata,
 		Authority: authority,
+=======
+	// addr.ServerName takes precedent over ClientConn authority, if present.
+	if addr.ServerName == "" {
+		addr.ServerName = ac.cc.authority
+>>>>>>> guomi
 	}
 
 	once := sync.Once{}
@@ -1269,10 +1391,17 @@ func (ac *addrConn) createTransport(addr resolver.Address, copts transport.Conne
 		copts.ChannelzParentID = ac.channelzID
 	}
 
+<<<<<<< HEAD
 	newTr, err := transport.NewClientTransport(connectCtx, ac.cc.ctx, target, copts, onPrefaceReceipt, onGoAway, onClose)
 	if err != nil {
 		// newTr is either nil, or closed.
 		channelz.Warningf(ac.channelzID, "grpc: addrConn.createTransport failed to connect to %v. Err: %v. Reconnecting...", addr, err)
+=======
+	newTr, err := transport.NewClientTransport(connectCtx, ac.cc.ctx, addr, copts, onPrefaceReceipt, onGoAway, onClose)
+	if err != nil {
+		// newTr is either nil, or closed.
+		channelz.Warningf(logger, ac.channelzID, "grpc: addrConn.createTransport failed to connect to %v. Err: %v. Reconnecting...", addr, err)
+>>>>>>> guomi
 		return nil, nil, err
 	}
 
@@ -1280,7 +1409,11 @@ func (ac *addrConn) createTransport(addr resolver.Address, copts transport.Conne
 	case <-time.After(time.Until(connectDeadline)):
 		// We didn't get the preface in time.
 		newTr.Close()
+<<<<<<< HEAD
 		channelz.Warningf(ac.channelzID, "grpc: addrConn.createTransport failed to connect to %v: didn't receive server preface in time. Reconnecting...", addr)
+=======
+		channelz.Warningf(logger, ac.channelzID, "grpc: addrConn.createTransport failed to connect to %v: didn't receive server preface in time. Reconnecting...", addr)
+>>>>>>> guomi
 		return nil, nil, errors.New("timed out waiting for server handshake")
 	case <-prefaceReceived:
 		// We got the preface - huzzah! things are good.
@@ -1297,7 +1430,11 @@ func (ac *addrConn) createTransport(addr resolver.Address, copts transport.Conne
 //
 // LB channel health checking is enabled when all requirements below are met:
 // 1. it is not disabled by the user with the WithDisableHealthCheck DialOption
+<<<<<<< HEAD
 // 2. internal.HealthCheckFunc is set by importing the grpc/healthcheck package
+=======
+// 2. internal.HealthCheckFunc is set by importing the grpc/health package
+>>>>>>> guomi
 // 3. a service config with non-empty healthCheckConfig field is provided
 // 4. the load balancer requests it
 //
@@ -1327,7 +1464,11 @@ func (ac *addrConn) startHealthCheck(ctx context.Context) {
 		// The health package is not imported to set health check function.
 		//
 		// TODO: add a link to the health check doc in the error message.
+<<<<<<< HEAD
 		channelz.Error(ac.channelzID, "Health check is requested but health check function is not set.")
+=======
+		channelz.Error(logger, ac.channelzID, "Health check is requested but health check function is not set.")
+>>>>>>> guomi
 		return
 	}
 
@@ -1357,9 +1498,15 @@ func (ac *addrConn) startHealthCheck(ctx context.Context) {
 		err := ac.cc.dopts.healthCheckFunc(ctx, newStream, setConnectivityState, healthCheckConfig.ServiceName)
 		if err != nil {
 			if status.Code(err) == codes.Unimplemented {
+<<<<<<< HEAD
 				channelz.Error(ac.channelzID, "Subchannel health check is unimplemented at server side, thus health check is disabled")
 			} else {
 				channelz.Errorf(ac.channelzID, "HealthCheckFunc exits with unexpected error %v", err)
+=======
+				channelz.Error(logger, ac.channelzID, "Subchannel health check is unimplemented at server side, thus health check is disabled")
+			} else {
+				channelz.Errorf(logger, ac.channelzID, "HealthCheckFunc exits with unexpected error %v", err)
+>>>>>>> guomi
 			}
 		}
 	}()
@@ -1424,7 +1571,11 @@ func (ac *addrConn) tearDown(err error) {
 		ac.mu.Lock()
 	}
 	if channelz.IsOn() {
+<<<<<<< HEAD
 		channelz.AddTraceEvent(ac.channelzID, 0, &channelz.TraceEventDesc{
+=======
+		channelz.AddTraceEvent(logger, ac.channelzID, 0, &channelz.TraceEventDesc{
+>>>>>>> guomi
 			Desc:     "Subchannel Deleted",
 			Severity: channelz.CtINFO,
 			Parent: &channelz.TraceEventDesc{
@@ -1532,3 +1683,18 @@ func (cc *ClientConn) getResolver(scheme string) resolver.Builder {
 	}
 	return resolver.Get(scheme)
 }
+<<<<<<< HEAD
+=======
+
+func (cc *ClientConn) updateConnectionError(err error) {
+	cc.lceMu.Lock()
+	cc.lastConnectionError = err
+	cc.lceMu.Unlock()
+}
+
+func (cc *ClientConn) connectionError() error {
+	cc.lceMu.Lock()
+	defer cc.lceMu.Unlock()
+	return cc.lastConnectionError
+}
+>>>>>>> guomi

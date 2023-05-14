@@ -13,6 +13,11 @@ import (
 	"time"
 	"unicode/utf16"
 	"unsafe"
+<<<<<<< HEAD
+=======
+
+	"golang.org/x/sys/internal/unsafeheader"
+>>>>>>> guomi
 )
 
 type Handle uintptr
@@ -117,6 +122,35 @@ func UTF16PtrFromString(s string) (*uint16, error) {
 	return &a[0], nil
 }
 
+<<<<<<< HEAD
+=======
+// UTF16PtrToString takes a pointer to a UTF-16 sequence and returns the corresponding UTF-8 encoded string.
+// If the pointer is nil, this returns the empty string. This assumes that the UTF-16 sequence is terminated
+// at a zero word; if the zero word is not present, the program may crash.
+func UTF16PtrToString(p *uint16) string {
+	if p == nil {
+		return ""
+	}
+	if *p == 0 {
+		return ""
+	}
+
+	// Find NUL terminator.
+	n := 0
+	for ptr := unsafe.Pointer(p); *(*uint16)(ptr) != 0; n++ {
+		ptr = unsafe.Pointer(uintptr(ptr) + unsafe.Sizeof(*p))
+	}
+
+	var s []uint16
+	h := (*unsafeheader.Slice)(unsafe.Pointer(&s))
+	h.Data = unsafe.Pointer(p)
+	h.Len = n
+	h.Cap = n
+
+	return string(utf16.Decode(s))
+}
+
+>>>>>>> guomi
 func Getpagesize() int { return 4096 }
 
 // NewCallback converts a Go function to a function pointer conforming to the stdcall calling convention.
@@ -275,11 +309,20 @@ func NewCallbackCDecl(fn interface{}) uintptr {
 //sys	ResumeThread(thread Handle) (ret uint32, err error) [failretval==0xffffffff] = kernel32.ResumeThread
 //sys	SetPriorityClass(process Handle, priorityClass uint32) (err error) = kernel32.SetPriorityClass
 //sys	GetPriorityClass(process Handle) (ret uint32, err error) = kernel32.GetPriorityClass
+<<<<<<< HEAD
+=======
+//sys	QueryInformationJobObject(job Handle, JobObjectInformationClass int32, JobObjectInformation uintptr, JobObjectInformationLength uint32, retlen *uint32) (err error) = kernel32.QueryInformationJobObject
+>>>>>>> guomi
 //sys	SetInformationJobObject(job Handle, JobObjectInformationClass uint32, JobObjectInformation uintptr, JobObjectInformationLength uint32) (ret int, err error)
 //sys	GenerateConsoleCtrlEvent(ctrlEvent uint32, processGroupID uint32) (err error)
 //sys	GetProcessId(process Handle) (id uint32, err error)
 //sys	OpenThread(desiredAccess uint32, inheritHandle bool, threadId uint32) (handle Handle, err error)
 //sys	SetProcessPriorityBoost(process Handle, disable bool) (err error) = kernel32.SetProcessPriorityBoost
+<<<<<<< HEAD
+=======
+//sys	GetProcessWorkingSetSizeEx(hProcess Handle, lpMinimumWorkingSetSize *uintptr, lpMaximumWorkingSetSize *uintptr, flags *uint32)
+//sys	SetProcessWorkingSetSizeEx(hProcess Handle, dwMinimumWorkingSetSize uintptr, dwMaximumWorkingSetSize uintptr, flags uint32) (err error)
+>>>>>>> guomi
 
 // Volume Management Functions
 //sys	DefineDosDevice(flags uint32, deviceName *uint16, targetPath *uint16) (err error) = DefineDosDeviceW
@@ -1181,7 +1224,16 @@ type IPv6Mreq struct {
 	Interface uint32
 }
 
+<<<<<<< HEAD
 func GetsockoptInt(fd Handle, level, opt int) (int, error) { return -1, syscall.EWINDOWS }
+=======
+func GetsockoptInt(fd Handle, level, opt int) (int, error) {
+	v := int32(0)
+	l := int32(unsafe.Sizeof(v))
+	err := Getsockopt(fd, int32(level), int32(opt), (*byte)(unsafe.Pointer(&v)), &l)
+	return int(v), err
+}
+>>>>>>> guomi
 
 func SetsockoptLinger(fd Handle, level, opt int, l *Linger) (err error) {
 	sys := sysLinger{Onoff: uint16(l.Onoff), Linger: uint16(l.Linger)}
@@ -1378,7 +1430,11 @@ func (t Token) KnownFolderPath(folderID *KNOWNFOLDERID, flags uint32) (string, e
 		return "", err
 	}
 	defer CoTaskMemFree(unsafe.Pointer(p))
+<<<<<<< HEAD
 	return UTF16ToString((*[(1 << 30) - 1]uint16)(unsafe.Pointer(p))[:]), nil
+=======
+	return UTF16PtrToString(p), nil
+>>>>>>> guomi
 }
 
 // RtlGetVersion returns the version of the underlying operating system, ignoring

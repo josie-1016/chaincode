@@ -7,3 +7,12 @@
 package cpu
 
 const cacheLineSize = 32
+<<<<<<< HEAD
+=======
+
+func initOptions() {
+	options = []option{
+		{Name: "msa", Feature: &MIPS64X.HasMSA},
+	}
+}
+>>>>>>> guomi

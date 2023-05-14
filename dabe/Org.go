@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
-	DecentralizedABE "github.com/wjfn/DecentralizedABE2020/model"
+	DecentralizedABE "github.com/vangogo/DecentralizedABE/model"
 	"log"
 )
 

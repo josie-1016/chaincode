@@ -1584,6 +1584,7 @@ const (
 	JOB_OBJECT_LIMIT_WORKINGSET                 = 0x00000001
 )
 
+<<<<<<< HEAD
 type JOBOBJECT_BASIC_LIMIT_INFORMATION struct {
 	PerProcessUserTimeLimit int64
 	PerJobUserTimeLimit     int64
@@ -1596,6 +1597,8 @@ type JOBOBJECT_BASIC_LIMIT_INFORMATION struct {
 	SchedulingClass         uint32
 }
 
+=======
+>>>>>>> guomi
 type IO_COUNTERS struct {
 	ReadOperationCount  uint64
 	WriteOperationCount uint64

@@ -26,7 +26,10 @@ import (
 
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials"
+<<<<<<< HEAD
 	"google.golang.org/grpc/grpclog"
+=======
+>>>>>>> guomi
 )
 
 // entry represents a node in the channelz database.
@@ -60,17 +63,29 @@ func (d *dummyEntry) addChild(id int64, e entry) {
 	// the addrConn will create a new transport. And when registering the new transport in
 	// channelz, its parent addrConn could have already been torn down and deleted
 	// from channelz tracking, and thus reach the code here.
+<<<<<<< HEAD
 	grpclog.Infof("attempt to add child of type %T with id %d to a parent (id=%d) that doesn't currently exist", e, id, d.idNotFound)
+=======
+	logger.Infof("attempt to add child of type %T with id %d to a parent (id=%d) that doesn't currently exist", e, id, d.idNotFound)
+>>>>>>> guomi
 }
 
 func (d *dummyEntry) deleteChild(id int64) {
 	// It is possible for a normal program to reach here under race condition.
 	// Refer to the example described in addChild().
+<<<<<<< HEAD
 	grpclog.Infof("attempt to delete child with id %d from a parent (id=%d) that doesn't currently exist", id, d.idNotFound)
 }
 
 func (d *dummyEntry) triggerDelete() {
 	grpclog.Warningf("attempt to delete an entry (id=%d) that doesn't currently exist", d.idNotFound)
+=======
+	logger.Infof("attempt to delete child with id %d from a parent (id=%d) that doesn't currently exist", id, d.idNotFound)
+}
+
+func (d *dummyEntry) triggerDelete() {
+	logger.Warningf("attempt to delete an entry (id=%d) that doesn't currently exist", d.idNotFound)
+>>>>>>> guomi
 }
 
 func (*dummyEntry) deleteSelfIfReady() {
@@ -215,7 +230,11 @@ func (c *channel) addChild(id int64, e entry) {
 	case *channel:
 		c.nestedChans[id] = v.refName
 	default:
+<<<<<<< HEAD
 		grpclog.Errorf("cannot add a child (id = %d) of type %T to a channel", id, e)
+=======
+		logger.Errorf("cannot add a child (id = %d) of type %T to a channel", id, e)
+>>>>>>> guomi
 	}
 }
 
@@ -326,7 +345,11 @@ func (sc *subChannel) addChild(id int64, e entry) {
 	if v, ok := e.(*normalSocket); ok {
 		sc.sockets[id] = v.refName
 	} else {
+<<<<<<< HEAD
 		grpclog.Errorf("cannot add a child (id = %d) of type %T to a subChannel", id, e)
+=======
+		logger.Errorf("cannot add a child (id = %d) of type %T to a subChannel", id, e)
+>>>>>>> guomi
 	}
 }
 
@@ -493,11 +516,19 @@ type listenSocket struct {
 }
 
 func (ls *listenSocket) addChild(id int64, e entry) {
+<<<<<<< HEAD
 	grpclog.Errorf("cannot add a child (id = %d) of type %T to a listen socket", id, e)
 }
 
 func (ls *listenSocket) deleteChild(id int64) {
 	grpclog.Errorf("cannot delete a child (id = %d) from a listen socket", id)
+=======
+	logger.Errorf("cannot add a child (id = %d) of type %T to a listen socket", id, e)
+}
+
+func (ls *listenSocket) deleteChild(id int64) {
+	logger.Errorf("cannot delete a child (id = %d) from a listen socket", id)
+>>>>>>> guomi
 }
 
 func (ls *listenSocket) triggerDelete() {
@@ -506,7 +537,11 @@ func (ls *listenSocket) triggerDelete() {
 }
 
 func (ls *listenSocket) deleteSelfIfReady() {
+<<<<<<< HEAD
 	grpclog.Errorf("cannot call deleteSelfIfReady on a listen socket")
+=======
+	logger.Errorf("cannot call deleteSelfIfReady on a listen socket")
+>>>>>>> guomi
 }
 
 func (ls *listenSocket) getParentID() int64 {
@@ -522,11 +557,19 @@ type normalSocket struct {
 }
 
 func (ns *normalSocket) addChild(id int64, e entry) {
+<<<<<<< HEAD
 	grpclog.Errorf("cannot add a child (id = %d) of type %T to a normal socket", id, e)
 }
 
 func (ns *normalSocket) deleteChild(id int64) {
 	grpclog.Errorf("cannot delete a child (id = %d) from a normal socket", id)
+=======
+	logger.Errorf("cannot add a child (id = %d) of type %T to a normal socket", id, e)
+}
+
+func (ns *normalSocket) deleteChild(id int64) {
+	logger.Errorf("cannot delete a child (id = %d) from a normal socket", id)
+>>>>>>> guomi
 }
 
 func (ns *normalSocket) triggerDelete() {
@@ -535,7 +578,11 @@ func (ns *normalSocket) triggerDelete() {
 }
 
 func (ns *normalSocket) deleteSelfIfReady() {
+<<<<<<< HEAD
 	grpclog.Errorf("cannot call deleteSelfIfReady on a normal socket")
+=======
+	logger.Errorf("cannot call deleteSelfIfReady on a normal socket")
+>>>>>>> guomi
 }
 
 func (ns *normalSocket) getParentID() int64 {
@@ -594,7 +641,11 @@ func (s *server) addChild(id int64, e entry) {
 	case *listenSocket:
 		s.listenSockets[id] = v.refName
 	default:
+<<<<<<< HEAD
 		grpclog.Errorf("cannot add a child (id = %d) of type %T to a server", id, e)
+=======
+		logger.Errorf("cannot add a child (id = %d) of type %T to a server", id, e)
+>>>>>>> guomi
 	}
 }
 

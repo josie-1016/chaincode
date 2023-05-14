@@ -1694,6 +1694,10 @@ func (sc *serverConn) processData(f *DataFrame) error {
 		if len(data) > 0 {
 			wrote, err := st.body.Write(data)
 			if err != nil {
+<<<<<<< HEAD
+=======
+				sc.sendWindowUpdate(nil, int(f.Length)-wrote)
+>>>>>>> guomi
 				return streamError(id, ErrCodeStreamClosed)
 			}
 			if wrote != len(data) {
@@ -2020,7 +2024,15 @@ func (sc *serverConn) newWriterAndRequest(st *stream, f *MetaHeadersFrame) (*res
 	}
 	if bodyOpen {
 		if vv, ok := rp.header["Content-Length"]; ok {
+<<<<<<< HEAD
 			req.ContentLength, _ = strconv.ParseInt(vv[0], 10, 64)
+=======
+			if cl, err := strconv.ParseUint(vv[0], 10, 63); err == nil {
+				req.ContentLength = int64(cl)
+			} else {
+				req.ContentLength = 0
+			}
+>>>>>>> guomi
 		} else {
 			req.ContentLength = -1
 		}
@@ -2403,9 +2415,14 @@ func (rws *responseWriterState) writeChunk(p []byte) (n int, err error) {
 		var ctype, clen string
 		if clen = rws.snapHeader.Get("Content-Length"); clen != "" {
 			rws.snapHeader.Del("Content-Length")
+<<<<<<< HEAD
 			clen64, err := strconv.ParseInt(clen, 10, 64)
 			if err == nil && clen64 >= 0 {
 				rws.sentContentLen = clen64
+=======
+			if cl, err := strconv.ParseUint(clen, 10, 63); err == nil {
+				rws.sentContentLen = int64(cl)
+>>>>>>> guomi
 			} else {
 				clen = ""
 			}

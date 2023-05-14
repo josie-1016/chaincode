@@ -3,7 +3,8 @@ package main
 import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
-	DecentralizedABE "github.com/wjfn/DecentralizedABE2020/model"
+	DecentralizedABE "github.com/vangogo/DecentralizedABE/model"
+	// DecentralizedABE "github.com/wjfn/DecentralizedABE2020/model"
 	"log"
 )
 
@@ -57,7 +58,7 @@ func (d *DABECC) decrypt(stub shim.ChaincodeStubInterface, args []string) pb.Res
 		log.Println(err)
 		return shim.Error(err.Error())
 	}
-	cipher := new(DecentralizedABE.Cipher)
+	cipher := new(DecentralizedABE.CipherSM4)
 	if err := DecentralizedABE.Deserialize2Struct([]byte(request.Cipher), cipher); err != nil {
 		log.Println(err)
 		return shim.Error(err.Error())

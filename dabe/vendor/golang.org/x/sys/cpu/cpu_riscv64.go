@@ -7,3 +7,8 @@
 package cpu
 
 const cacheLineSize = 32
+<<<<<<< HEAD
+=======
+
+func initOptions() {}
+>>>>>>> guomi

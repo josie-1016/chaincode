@@ -73,10 +73,23 @@ const (
 	EXTRA_MAGIC                      = 0x45585401
 	FF1                              = 0x8000
 	FFDLY                            = 0x8000
+<<<<<<< HEAD
 	FLUSHO                           = 0x1000
 	FPSIMD_MAGIC                     = 0x46508001
 	FS_IOC_GET_ENCRYPTION_POLICY     = 0x400c6615
 	FS_IOC_GET_ENCRYPTION_PWSALT     = 0x40106614
+=======
+	FICLONE                          = 0x40049409
+	FICLONERANGE                     = 0x4020940d
+	FLUSHO                           = 0x1000
+	FPSIMD_MAGIC                     = 0x46508001
+	FS_IOC_ENABLE_VERITY             = 0x40806685
+	FS_IOC_GETFLAGS                  = 0x80086601
+	FS_IOC_GET_ENCRYPTION_NONCE      = 0x8010661b
+	FS_IOC_GET_ENCRYPTION_POLICY     = 0x400c6615
+	FS_IOC_GET_ENCRYPTION_PWSALT     = 0x40106614
+	FS_IOC_SETFLAGS                  = 0x40086602
+>>>>>>> guomi
 	FS_IOC_SET_ENCRYPTION_POLICY     = 0x800c6613
 	F_GETLK                          = 0x5
 	F_GETLK64                        = 0x5
@@ -188,6 +201,10 @@ const (
 	PPPIOCSRASYNCMAP                 = 0x40047454
 	PPPIOCSXASYNCMAP                 = 0x4020744f
 	PPPIOCXFERUNIT                   = 0x744e
+<<<<<<< HEAD
+=======
+	PROT_BTI                         = 0x10
+>>>>>>> guomi
 	PR_SET_PTRACER_ANY               = 0xffffffffffffffff
 	PTRACE_SYSEMU                    = 0x1f
 	PTRACE_SYSEMU_SINGLESTEP         = 0x20
@@ -334,6 +351,11 @@ const (
 	TCSETXF                          = 0x5434
 	TCSETXW                          = 0x5435
 	TCXONC                           = 0x540a
+<<<<<<< HEAD
+=======
+	TFD_CLOEXEC                      = 0x80000
+	TFD_NONBLOCK                     = 0x800
+>>>>>>> guomi
 	TIOCCBRK                         = 0x5428
 	TIOCCONS                         = 0x541d
 	TIOCEXCL                         = 0x540c

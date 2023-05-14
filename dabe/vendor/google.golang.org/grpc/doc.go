@@ -16,6 +16,11 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+//go:generate ./regenerate.sh
+
+>>>>>>> guomi
 /*
 Package grpc implements an RPC system called gRPC.
 

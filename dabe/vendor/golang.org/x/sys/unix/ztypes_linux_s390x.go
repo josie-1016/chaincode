@@ -117,6 +117,16 @@ type Flock_t struct {
 	_      [4]byte
 }
 
+<<<<<<< HEAD
+=======
+type DmNameList struct {
+	Dev  uint64
+	Next uint32
+	Name [0]byte
+	_    [4]byte
+}
+
+>>>>>>> guomi
 const (
 	FADV_DONTNEED = 0x6
 	FADV_NOREUSE  = 0x7
@@ -300,6 +310,10 @@ type Taskstats struct {
 	Freepages_delay_total     uint64
 	Thrashing_count           uint64
 	Thrashing_delay_total     uint64
+<<<<<<< HEAD
+=======
+	Ac_btime64                uint64
+>>>>>>> guomi
 }
 
 type cpuMask uint64

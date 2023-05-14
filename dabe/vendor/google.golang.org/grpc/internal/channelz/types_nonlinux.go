@@ -22,8 +22,11 @@ package channelz
 
 import (
 	"sync"
+<<<<<<< HEAD
 
 	"google.golang.org/grpc/grpclog"
+=======
+>>>>>>> guomi
 )
 
 var once sync.Once
@@ -39,6 +42,10 @@ type SocketOptionData struct {
 // Windows OS doesn't support Socket Option
 func (s *SocketOptionData) Getsockopt(fd uintptr) {
 	once.Do(func() {
+<<<<<<< HEAD
 		grpclog.Warningln("Channelz: socket options are not supported on non-linux os and appengine.")
+=======
+		logger.Warning("Channelz: socket options are not supported on non-linux os and appengine.")
+>>>>>>> guomi
 	})
 }

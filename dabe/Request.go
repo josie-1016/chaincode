@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/Nik-U/pbc"
-	DecentralizedABE "github.com/wjfn/DecentralizedABE2020/model"
+	DecentralizedABE "github.com/vangogo/DecentralizedABE/model"
 )
 
 type GenerateOPKRequest struct {

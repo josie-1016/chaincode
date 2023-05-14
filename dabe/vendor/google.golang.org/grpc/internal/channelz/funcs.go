@@ -30,7 +30,11 @@ import (
 	"sync/atomic"
 	"time"
 
+<<<<<<< HEAD
 	"google.golang.org/grpc/internal/grpclog"
+=======
+	"google.golang.org/grpc/grpclog"
+>>>>>>> guomi
 )
 
 const (
@@ -216,7 +220,11 @@ func RegisterChannel(c Channel, pid int64, ref string) int64 {
 // by pid). It returns the unique channelz tracking id assigned to this subchannel.
 func RegisterSubChannel(c Channel, pid int64, ref string) int64 {
 	if pid == 0 {
+<<<<<<< HEAD
 		grpclog.ErrorDepth(0, "a SubChannel's parent id cannot be 0")
+=======
+		logger.Error("a SubChannel's parent id cannot be 0")
+>>>>>>> guomi
 		return 0
 	}
 	id := idGen.genID()
@@ -253,7 +261,11 @@ func RegisterServer(s Server, ref string) int64 {
 // this listen socket.
 func RegisterListenSocket(s Socket, pid int64, ref string) int64 {
 	if pid == 0 {
+<<<<<<< HEAD
 		grpclog.ErrorDepth(0, "a ListenSocket's parent id cannot be 0")
+=======
+		logger.Error("a ListenSocket's parent id cannot be 0")
+>>>>>>> guomi
 		return 0
 	}
 	id := idGen.genID()
@@ -268,7 +280,11 @@ func RegisterListenSocket(s Socket, pid int64, ref string) int64 {
 // this normal socket.
 func RegisterNormalSocket(s Socket, pid int64, ref string) int64 {
 	if pid == 0 {
+<<<<<<< HEAD
 		grpclog.ErrorDepth(0, "a NormalSocket's parent id cannot be 0")
+=======
+		logger.Error("a NormalSocket's parent id cannot be 0")
+>>>>>>> guomi
 		return 0
 	}
 	id := idGen.genID()
@@ -294,6 +310,7 @@ type TraceEventDesc struct {
 }
 
 // AddTraceEvent adds trace related to the entity with specified id, using the provided TraceEventDesc.
+<<<<<<< HEAD
 func AddTraceEvent(id int64, depth int, desc *TraceEventDesc) {
 	for d := desc; d != nil; d = d.Parent {
 		switch d.Severity {
@@ -305,6 +322,19 @@ func AddTraceEvent(id int64, depth int, desc *TraceEventDesc) {
 			grpclog.WarningDepth(depth+1, d.Desc)
 		case CtError:
 			grpclog.ErrorDepth(depth+1, d.Desc)
+=======
+func AddTraceEvent(l grpclog.DepthLoggerV2, id int64, depth int, desc *TraceEventDesc) {
+	for d := desc; d != nil; d = d.Parent {
+		switch d.Severity {
+		case CtUNKNOWN:
+			l.InfoDepth(depth+1, d.Desc)
+		case CtINFO:
+			l.InfoDepth(depth+1, d.Desc)
+		case CtWarning:
+			l.WarningDepth(depth+1, d.Desc)
+		case CtError:
+			l.ErrorDepth(depth+1, d.Desc)
+>>>>>>> guomi
 		}
 	}
 	if getMaxTraceEntry() == 0 {

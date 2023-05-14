@@ -1,4 +1,4 @@
-module github.com/BlockchainLabFudan/2020-Winter-vacation-homework/dabe
+module dabe
 
 go 1.13
 
@@ -17,10 +17,12 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/viper v1.7.0 // indirect
 	github.com/sykesm/zap-logfmt v0.0.3 // indirect
-	github.com/wjfn/DecentralizedABE2020 v1.2.0
 	go.uber.org/zap v1.15.0 // indirect
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
 	golang.org/x/net v0.0.0-20200513185701-a91f0712d120 // indirect
 	google.golang.org/grpc v1.29.1 // indirect
+	github.com/tjfoc/gmsm v1.4.1 // indirect
+	github.com/vangogo/DecentralizedABE v1.0.8
+	go.uber.org/zap v1.15.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )

@@ -16,6 +16,7 @@ func (b *storageBuf) asBytes() *[maxRate]byte {
 	return (*[maxRate]byte)(unsafe.Pointer(b))
 }
 
+<<<<<<< HEAD
 //go:nocheckptr
 //
 // xorInUnaligned intentionally reads the input buffer as an unaligned slice of
@@ -25,6 +26,8 @@ func (b *storageBuf) asBytes() *[maxRate]byte {
 // 	https://golang.org/issue/37298
 // 	https://golang.org/issue/35381
 
+=======
+>>>>>>> guomi
 // xorInUnaligned uses unaligned reads and writes to update d.a to contain d.a
 // XOR buf.
 func xorInUnaligned(d *state, buf []byte) {

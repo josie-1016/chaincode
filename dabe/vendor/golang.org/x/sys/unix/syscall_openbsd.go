@@ -114,6 +114,7 @@ func Getdirentries(fd int, buf []byte, basep *uintptr) (n int, err error) {
 	return
 }
 
+<<<<<<< HEAD
 const ImplementsGetwd = true
 
 //sys	Getcwd(buf []byte) (n int, err error) = SYS___GETCWD
@@ -131,6 +132,10 @@ func Getwd() (string, error) {
 	return string(buf[:n]), nil
 }
 
+=======
+//sys	Getcwd(buf []byte) (n int, err error) = SYS___GETCWD
+
+>>>>>>> guomi
 func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err error) {
 	if raceenabled {
 		raceReleaseMerge(unsafe.Pointer(&ioSync))

@@ -8,7 +8,10 @@ package windows
 
 import (
 	"syscall"
+<<<<<<< HEAD
 	"unicode/utf16"
+=======
+>>>>>>> guomi
 	"unsafe"
 )
 
@@ -40,6 +43,7 @@ func (token Token) Environ(inheritExisting bool) (env []string, err error) {
 	defer DestroyEnvironmentBlock(block)
 	blockp := uintptr(unsafe.Pointer(block))
 	for {
+<<<<<<< HEAD
 		entry := (*[(1 << 30) - 1]uint16)(unsafe.Pointer(blockp))[:]
 		for i, v := range entry {
 			if v == 0 {
@@ -51,6 +55,13 @@ func (token Token) Environ(inheritExisting bool) (env []string, err error) {
 			break
 		}
 		env = append(env, string(utf16.Decode(entry)))
+=======
+		entry := UTF16PtrToString((*uint16)(unsafe.Pointer(blockp)))
+		if len(entry) == 0 {
+			break
+		}
+		env = append(env, entry)
+>>>>>>> guomi
 		blockp += 2 * (uintptr(len(entry)) + 1)
 	}
 	return env, nil
