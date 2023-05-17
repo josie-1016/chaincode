@@ -1,4 +1,4 @@
-module github.com/MonteCarloClub/dabe
+module DecentralizedABE
 
 go 1.18
 

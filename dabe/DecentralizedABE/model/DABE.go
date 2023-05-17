@@ -3,8 +3,10 @@ package model
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/MonteCarloClub/dabe/model/AES"
+	// "github.com/MonteCarloClub/dabe/model/AES"
+	"github.com/Kume369/DecentralizedABE/model/AES"
 	"github.com/Nik-U/pbc"
+	"log"
 )
 
 type DABE struct {
@@ -135,6 +137,7 @@ func (d *DABE) Encrypt(m string, uPolicy string, authorities map[string]Authorit
 		c3s[i] = c3
 	}
 	fmt.Println("DABE Encrypt success")
+	log.Println(c0,",",c1s,",",c2s,",",c3s,",",aesCipherText,",",uPolicy)
 	return &Cipher{
 		C0:         c0,
 		C1s:        c1s,

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/MonteCarloClub/dabe/model"
+	"DecentralizedABE/model"
 	"github.com/Nik-U/pbc"
 )
 
