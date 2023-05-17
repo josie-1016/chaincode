@@ -82,33 +82,18 @@ func IoctlRetInt(fd int, req uint) (int, error) {
 	return int(ret), nil
 }
 
-<<<<<<< HEAD
-// IoctlSetPointerInt performs an ioctl operation which sets an
-// integer value on fd, using the specified request number. The ioctl
-// argument is called with a pointer to the integer value, rather than
-// passing the integer value directly.
-func IoctlSetPointerInt(fd int, req uint, value int) error {
-	v := int32(value)
-	return ioctl(fd, req, uintptr(unsafe.Pointer(&v)))
-}
-
-=======
->>>>>>> guomi
 func IoctlSetRTCTime(fd int, value *RTCTime) error {
 	err := ioctl(fd, RTC_SET_TIME, uintptr(unsafe.Pointer(value)))
 	runtime.KeepAlive(value)
 	return err
 }
 
-<<<<<<< HEAD
-=======
 func IoctlSetRTCWkAlrm(fd int, value *RTCWkAlrm) error {
 	err := ioctl(fd, RTC_WKALM_SET, uintptr(unsafe.Pointer(value)))
 	runtime.KeepAlive(value)
 	return err
 }
 
->>>>>>> guomi
 func IoctlGetUint32(fd int, req uint) (uint32, error) {
 	var value uint32
 	err := ioctl(fd, req, uintptr(unsafe.Pointer(&value)))
@@ -121,8 +106,6 @@ func IoctlGetRTCTime(fd int) (*RTCTime, error) {
 	return &value, err
 }
 
-<<<<<<< HEAD
-=======
 func IoctlGetRTCWkAlrm(fd int) (*RTCWkAlrm, error) {
 	var value RTCWkAlrm
 	err := ioctl(fd, RTC_WKALM_RD, uintptr(unsafe.Pointer(&value)))
@@ -154,7 +137,6 @@ func IoctlFileDedupeRange(destFd int, value *FileDedupeRange) error {
 	return err
 }
 
->>>>>>> guomi
 //sys	Linkat(olddirfd int, oldpath string, newdirfd int, newpath string, flags int) (err error)
 
 func Link(oldpath string, newpath string) (err error) {
@@ -179,15 +161,12 @@ func Openat(dirfd int, path string, flags int, mode uint32) (fd int, err error) 
 	return openat(dirfd, path, flags|O_LARGEFILE, mode)
 }
 
-<<<<<<< HEAD
-=======
 //sys	openat2(dirfd int, path string, open_how *OpenHow, size int) (fd int, err error)
 
 func Openat2(dirfd int, path string, how *OpenHow) (fd int, err error) {
 	return openat2(dirfd, path, how, SizeofOpenHow)
 }
 
->>>>>>> guomi
 //sys	ppoll(fds *PollFd, nfds int, timeout *Timespec, sigmask *Sigset_t) (n int, err error)
 
 func Ppoll(fds []PollFd, timeout *Timespec, sigmask *Sigset_t) (n int, err error) {
@@ -928,8 +907,6 @@ func (sa *SockaddrL2TPIP6) sockaddr() (unsafe.Pointer, _Socklen, error) {
 	return unsafe.Pointer(&sa.raw), SizeofSockaddrL2TPIP6, nil
 }
 
-<<<<<<< HEAD
-=======
 // SockaddrIUCV implements the Sockaddr interface for AF_IUCV sockets.
 type SockaddrIUCV struct {
 	UserID string
@@ -959,7 +936,6 @@ func (sa *SockaddrIUCV) sockaddr() (unsafe.Pointer, _Socklen, error) {
 	return unsafe.Pointer(&sa.raw), SizeofSockaddrIUCV, nil
 }
 
->>>>>>> guomi
 func anyToSockaddr(fd int, rsa *RawSockaddrAny) (Sockaddr, error) {
 	switch rsa.Addr.Family {
 	case AF_NETLINK:
@@ -1140,8 +1116,6 @@ func anyToSockaddr(fd int, rsa *RawSockaddrAny) (Sockaddr, error) {
 		}
 
 		return sa, nil
-<<<<<<< HEAD
-=======
 	case AF_IUCV:
 		pp := (*RawSockaddrIUCV)(unsafe.Pointer(rsa))
 
@@ -1174,7 +1148,6 @@ func anyToSockaddr(fd int, rsa *RawSockaddrAny) (Sockaddr, error) {
 		}
 		return sa, nil
 
->>>>>>> guomi
 	}
 	return nil, EAFNOSUPPORT
 }
@@ -1755,8 +1728,6 @@ func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err e
 //sys	CopyFileRange(rfd int, roff *int64, wfd int, woff *int64, len int, flags int) (n int, err error)
 //sys	DeleteModule(name string, flags int) (err error)
 //sys	Dup(oldfd int) (fd int, err error)
-<<<<<<< HEAD
-=======
 
 func Dup2(oldfd, newfd int) error {
 	// Android O and newer blocks dup2; riscv and arm64 don't implement dup2.
@@ -1766,7 +1737,6 @@ func Dup2(oldfd, newfd int) error {
 	return dup2(oldfd, newfd)
 }
 
->>>>>>> guomi
 //sys	Dup3(oldfd int, newfd int, flags int) (err error)
 //sysnb	EpollCreate1(flag int) (fd int, err error)
 //sysnb	EpollCtl(epfd int, op int, fd int, event *EpollEvent) (err error)
@@ -1891,12 +1861,9 @@ func Signalfd(fd int, sigmask *Sigset_t, flags int) (newfd int, err error) {
 //sys	Syncfs(fd int) (err error)
 //sysnb	Sysinfo(info *Sysinfo_t) (err error)
 //sys	Tee(rfd int, wfd int, len int, flags int) (n int64, err error)
-<<<<<<< HEAD
-=======
 //sysnb TimerfdCreate(clockid int, flags int) (fd int, err error)
 //sysnb TimerfdGettime(fd int, currValue *ItimerSpec) (err error)
 //sysnb TimerfdSettime(fd int, flags int, newValue *ItimerSpec, oldValue *ItimerSpec) (err error)
->>>>>>> guomi
 //sysnb	Tgkill(tgid int, tid int, sig syscall.Signal) (err error)
 //sysnb	Times(tms *Tms) (ticks uintptr, err error)
 //sysnb	Umask(mask int) (oldmask int)
@@ -2066,13 +2033,6 @@ func Vmsplice(fd int, iovs []Iovec, flags int) (int, error) {
 	return int(n), nil
 }
 
-<<<<<<< HEAD
-//sys	faccessat(dirfd int, path string, mode uint32) (err error)
-
-func Faccessat(dirfd int, path string, mode uint32, flags int) (err error) {
-	if flags & ^(AT_SYMLINK_NOFOLLOW|AT_EACCESS) != 0 {
-		return EINVAL
-=======
 func isGroupMember(gid int) bool {
 	groups, err := Getgroups()
 	if err != nil {
@@ -2097,7 +2057,6 @@ func Faccessat(dirfd int, path string, mode uint32, flags int) (err error) {
 
 	if err := Faccessat2(dirfd, path, mode, flags); err != ENOSYS && err != EPERM {
 		return err
->>>>>>> guomi
 	}
 
 	// The Linux kernel faccessat system call does not take any flags.
@@ -2106,13 +2065,8 @@ func Faccessat(dirfd int, path string, mode uint32, flags int) (err error) {
 	// Because people naturally expect syscall.Faccessat to act
 	// like C faccessat, we do the same.
 
-<<<<<<< HEAD
-	if flags == 0 {
-		return faccessat(dirfd, path, mode)
-=======
 	if flags & ^(AT_SYMLINK_NOFOLLOW|AT_EACCESS) != 0 {
 		return EINVAL
->>>>>>> guomi
 	}
 
 	var st Stat_t
@@ -2155,11 +2109,7 @@ func Faccessat(dirfd int, path string, mode uint32, flags int) (err error) {
 			gid = Getgid()
 		}
 
-<<<<<<< HEAD
-		if uint32(gid) == st.Gid {
-=======
 		if uint32(gid) == st.Gid || isGroupMember(gid) {
->>>>>>> guomi
 			fmode = (st.Mode >> 3) & 7
 		} else {
 			fmode = st.Mode & 7
@@ -2260,8 +2210,6 @@ func Klogset(typ int, arg int) (err error) {
 	return nil
 }
 
-<<<<<<< HEAD
-=======
 // RemoteIovec is Iovec with the pointer replaced with an integer.
 // It is used for ProcessVMReadv and ProcessVMWritev, where the pointer
 // refers to a location in a different process' address space, which
@@ -2274,7 +2222,6 @@ type RemoteIovec struct {
 //sys	ProcessVMReadv(pid int, localIov []Iovec, remoteIov []RemoteIovec, flags uint) (n int, err error) = SYS_PROCESS_VM_READV
 //sys	ProcessVMWritev(pid int, localIov []Iovec, remoteIov []RemoteIovec, flags uint) (n int, err error) = SYS_PROCESS_VM_WRITEV
 
->>>>>>> guomi
 /*
  * Unimplemented
  */
@@ -2369,10 +2316,6 @@ type RemoteIovec struct {
 // TimerGetoverrun
 // TimerGettime
 // TimerSettime
-<<<<<<< HEAD
-// Timerfd
-=======
->>>>>>> guomi
 // Tkill (obsolete)
 // Tuxcall
 // Umount2

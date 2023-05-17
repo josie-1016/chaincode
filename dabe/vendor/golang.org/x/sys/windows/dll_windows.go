@@ -104,8 +104,6 @@ func (d *DLL) MustFindProc(name string) *Proc {
 	return p
 }
 
-<<<<<<< HEAD
-=======
 // FindProcByOrdinal searches DLL d for procedure by ordinal and returns *Proc
 // if found. It returns an error if search fails.
 func (d *DLL) FindProcByOrdinal(ordinal uintptr) (proc *Proc, err error) {
@@ -135,7 +133,6 @@ func (d *DLL) MustFindProcByOrdinal(ordinal uintptr) *Proc {
 	return p
 }
 
->>>>>>> guomi
 // Release unloads DLL d from memory.
 func (d *DLL) Release() (err error) {
 	return FreeLibrary(d.Handle)

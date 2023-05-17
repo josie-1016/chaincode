@@ -50,12 +50,9 @@ func New(kvs ...interface{}) *Attributes {
 // times, the last value overwrites all previous values for that key.  To
 // remove an existing key, use a nil value.
 func (a *Attributes) WithValues(kvs ...interface{}) *Attributes {
-<<<<<<< HEAD
-=======
 	if a == nil {
 		return New(kvs...)
 	}
->>>>>>> guomi
 	if len(kvs)%2 != 0 {
 		panic(fmt.Sprintf("attributes.New called with unexpected input: len(kvs) = %v", len(kvs)))
 	}
@@ -72,11 +69,8 @@ func (a *Attributes) WithValues(kvs ...interface{}) *Attributes {
 // Value returns the value associated with these attributes for key, or nil if
 // no value is associated with key.
 func (a *Attributes) Value(key interface{}) interface{} {
-<<<<<<< HEAD
-=======
 	if a == nil {
 		return nil
 	}
->>>>>>> guomi
 	return a.m[key]
 }

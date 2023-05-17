@@ -12,11 +12,8 @@ import (
 	"sync"
 	"syscall"
 	"unsafe"
-<<<<<<< HEAD
-=======
 
 	"golang.org/x/sys/internal/unsafeheader"
->>>>>>> guomi
 )
 
 var (
@@ -118,24 +115,12 @@ func (m *mmapper) Mmap(fd int, offset int64, length int, prot int, flags int) (d
 		return nil, errno
 	}
 
-<<<<<<< HEAD
-	// Slice memory layout
-	var sl = struct {
-		addr uintptr
-		len  int
-		cap  int
-	}{addr, length, length}
-
-	// Use unsafe to turn sl into a []byte.
-	b := *(*[]byte)(unsafe.Pointer(&sl))
-=======
 	// Use unsafe to convert addr into a []byte.
 	var b []byte
 	hdr := (*unsafeheader.Slice)(unsafe.Pointer(&b))
 	hdr.Data = unsafe.Pointer(addr)
 	hdr.Cap = length
 	hdr.Len = length
->>>>>>> guomi
 
 	// Register mapping in m and return it.
 	p := &b[cap(b)-1]

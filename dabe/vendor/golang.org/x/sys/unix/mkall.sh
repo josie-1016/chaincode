@@ -73,38 +73,22 @@ aix_ppc64)
 darwin_386)
 	mkerrors="$mkerrors -m32"
 	mksyscall="go run mksyscall.go -l32"
-<<<<<<< HEAD
-	mksysnum="go run mksysnum.go $(xcrun --show-sdk-path --sdk macosx)/usr/include/sys/syscall.h"
-=======
->>>>>>> guomi
 	mktypes="GOARCH=$GOARCH go tool cgo -godefs"
 	mkasm="go run mkasm_darwin.go"
 	;;
 darwin_amd64)
 	mkerrors="$mkerrors -m64"
-<<<<<<< HEAD
-	mksysnum="go run mksysnum.go $(xcrun --show-sdk-path --sdk macosx)/usr/include/sys/syscall.h"
-=======
->>>>>>> guomi
 	mktypes="GOARCH=$GOARCH go tool cgo -godefs"
 	mkasm="go run mkasm_darwin.go"
 	;;
 darwin_arm)
 	mkerrors="$mkerrors"
 	mksyscall="go run mksyscall.go -l32"
-<<<<<<< HEAD
-	mksysnum="go run mksysnum.go $(xcrun --show-sdk-path --sdk iphoneos)/usr/include/sys/syscall.h"
-=======
->>>>>>> guomi
 	mktypes="GOARCH=$GOARCH go tool cgo -godefs"
 	mkasm="go run mkasm_darwin.go"
 	;;
 darwin_arm64)
 	mkerrors="$mkerrors -m64"
-<<<<<<< HEAD
-	mksysnum="go run mksysnum.go $(xcrun --show-sdk-path --sdk iphoneos)/usr/include/sys/syscall.h"
-=======
->>>>>>> guomi
 	mktypes="GOARCH=$GOARCH go tool cgo -godefs"
 	mkasm="go run mkasm_darwin.go"
 	;;
@@ -196,8 +180,6 @@ openbsd_arm64)
 	# API consistent across platforms.
 	mktypes="GOARCH=$GOARCH go tool cgo -godefs -- -fsigned-char"
 	;;
-<<<<<<< HEAD
-=======
 openbsd_mips64)
 	mkerrors="$mkerrors -m64"
 	mksyscall="go run mksyscall.go -openbsd"
@@ -207,7 +189,6 @@ openbsd_mips64)
 	# API consistent across platforms.
 	mktypes="GOARCH=$GOARCH go tool cgo -godefs -- -fsigned-char"
 	;;
->>>>>>> guomi
 solaris_amd64)
 	mksyscall="go run mksyscall_solaris.go"
 	mkerrors="$mkerrors -m64"
@@ -241,11 +222,6 @@ esac
 				# aix/ppc64 script generates files instead of writing to stdin.
 				echo "$mksyscall -tags $GOOS,$GOARCH $syscall_goos $GOOSARCH_in && gofmt -w zsyscall_$GOOSARCH.go && gofmt -w zsyscall_"$GOOSARCH"_gccgo.go && gofmt -w zsyscall_"$GOOSARCH"_gc.go " ;
 			elif [ "$GOOS" == "darwin" ]; then
-<<<<<<< HEAD
-			        # pre-1.12, direct syscalls
-			        echo "$mksyscall -tags $GOOS,$GOARCH,!go1.12 $syscall_goos syscall_darwin_${GOARCH}.1_11.go $GOOSARCH_in |gofmt >zsyscall_$GOOSARCH.1_11.go";
-=======
->>>>>>> guomi
 			        # 1.12 and later, syscalls via libSystem
 				echo "$mksyscall -tags $GOOS,$GOARCH,go1.12 $syscall_goos $GOOSARCH_in |gofmt >zsyscall_$GOOSARCH.go";
 				# 1.13 and later, syscalls via libSystem (including syscallPtr)

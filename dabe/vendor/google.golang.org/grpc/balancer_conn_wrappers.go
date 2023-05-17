@@ -74,15 +74,7 @@ func (ccb *ccBalancerWrapper) watcher() {
 			}
 			ccb.balancerMu.Lock()
 			su := t.(*scStateUpdate)
-<<<<<<< HEAD
-			if ub, ok := ccb.balancer.(balancer.V2Balancer); ok {
-				ub.UpdateSubConnState(su.sc, balancer.SubConnState{ConnectivityState: su.state, ConnectionError: su.err})
-			} else {
-				ccb.balancer.HandleSubConnStateChange(su.sc, su.state)
-			}
-=======
 			ccb.balancer.UpdateSubConnState(su.sc, balancer.SubConnState{ConnectivityState: su.state, ConnectionError: su.err})
->>>>>>> guomi
 			ccb.balancerMu.Unlock()
 		case <-ccb.done.Done():
 		}
@@ -127,21 +119,6 @@ func (ccb *ccBalancerWrapper) handleSubConnStateChange(sc balancer.SubConn, s co
 func (ccb *ccBalancerWrapper) updateClientConnState(ccs *balancer.ClientConnState) error {
 	ccb.balancerMu.Lock()
 	defer ccb.balancerMu.Unlock()
-<<<<<<< HEAD
-	if ub, ok := ccb.balancer.(balancer.V2Balancer); ok {
-		return ub.UpdateClientConnState(*ccs)
-	}
-	ccb.balancer.HandleResolvedAddrs(ccs.ResolverState.Addresses, nil)
-	return nil
-}
-
-func (ccb *ccBalancerWrapper) resolverError(err error) {
-	if ub, ok := ccb.balancer.(balancer.V2Balancer); ok {
-		ccb.balancerMu.Lock()
-		ub.ResolverError(err)
-		ccb.balancerMu.Unlock()
-	}
-=======
 	return ccb.balancer.UpdateClientConnState(*ccs)
 }
 
@@ -149,7 +126,6 @@ func (ccb *ccBalancerWrapper) resolverError(err error) {
 	ccb.balancerMu.Lock()
 	ccb.balancer.ResolverError(err)
 	ccb.balancerMu.Unlock()
->>>>>>> guomi
 }
 
 func (ccb *ccBalancerWrapper) NewSubConn(addrs []resolver.Address, opts balancer.NewSubConnOptions) (balancer.SubConn, error) {
@@ -187,24 +163,6 @@ func (ccb *ccBalancerWrapper) RemoveSubConn(sc balancer.SubConn) {
 	ccb.cc.removeAddrConn(acbw.getAddrConn(), errConnDrain)
 }
 
-<<<<<<< HEAD
-func (ccb *ccBalancerWrapper) UpdateBalancerState(s connectivity.State, p balancer.Picker) {
-	ccb.mu.Lock()
-	defer ccb.mu.Unlock()
-	if ccb.subConns == nil {
-		return
-	}
-	// Update picker before updating state.  Even though the ordering here does
-	// not matter, it can lead to multiple calls of Pick in the common start-up
-	// case where we wait for ready and then perform an RPC.  If the picker is
-	// updated later, we could call the "connecting" picker when the state is
-	// updated, and then call the "ready" picker after the picker gets updated.
-	ccb.cc.blockingpicker.updatePicker(p)
-	ccb.cc.csMgr.updateState(s)
-}
-
-=======
->>>>>>> guomi
 func (ccb *ccBalancerWrapper) UpdateState(s balancer.State) {
 	ccb.mu.Lock()
 	defer ccb.mu.Unlock()
@@ -216,11 +174,7 @@ func (ccb *ccBalancerWrapper) UpdateState(s balancer.State) {
 	// case where we wait for ready and then perform an RPC.  If the picker is
 	// updated later, we could call the "connecting" picker when the state is
 	// updated, and then call the "ready" picker after the picker gets updated.
-<<<<<<< HEAD
-	ccb.cc.blockingpicker.updatePickerV2(s.Picker)
-=======
 	ccb.cc.blockingpicker.updatePicker(s.Picker)
->>>>>>> guomi
 	ccb.cc.csMgr.updateState(s.ConnectivityState)
 }
 
@@ -266,11 +220,7 @@ func (acbw *acBalancerWrapper) UpdateAddresses(addrs []resolver.Address) {
 
 		ac, err := cc.newAddrConn(addrs, opts)
 		if err != nil {
-<<<<<<< HEAD
-			channelz.Warningf(acbw.ac.channelzID, "acBalancerWrapper: UpdateAddresses: failed to newAddrConn: %v", err)
-=======
 			channelz.Warningf(logger, acbw.ac.channelzID, "acBalancerWrapper: UpdateAddresses: failed to newAddrConn: %v", err)
->>>>>>> guomi
 			return
 		}
 		acbw.ac = ac

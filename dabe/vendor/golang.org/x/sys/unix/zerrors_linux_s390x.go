@@ -71,11 +71,6 @@ const (
 	EXTPROC                          = 0x10000
 	FF1                              = 0x8000
 	FFDLY                            = 0x8000
-<<<<<<< HEAD
-	FLUSHO                           = 0x1000
-	FS_IOC_GET_ENCRYPTION_POLICY     = 0x400c6615
-	FS_IOC_GET_ENCRYPTION_PWSALT     = 0x40106614
-=======
 	FICLONE                          = 0x40049409
 	FICLONERANGE                     = 0x4020940d
 	FLUSHO                           = 0x1000
@@ -85,7 +80,6 @@ const (
 	FS_IOC_GET_ENCRYPTION_POLICY     = 0x400c6615
 	FS_IOC_GET_ENCRYPTION_PWSALT     = 0x40106614
 	FS_IOC_SETFLAGS                  = 0x40086602
->>>>>>> guomi
 	FS_IOC_SET_ENCRYPTION_POLICY     = 0x800c6613
 	F_GETLK                          = 0x5
 	F_GETLK64                        = 0x5
@@ -413,11 +407,8 @@ const (
 	TCSETXF                          = 0x5434
 	TCSETXW                          = 0x5435
 	TCXONC                           = 0x540a
-<<<<<<< HEAD
-=======
 	TFD_CLOEXEC                      = 0x80000
 	TFD_NONBLOCK                     = 0x800
->>>>>>> guomi
 	TIOCCBRK                         = 0x5428
 	TIOCCONS                         = 0x541d
 	TIOCEXCL                         = 0x540c

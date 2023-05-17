@@ -21,11 +21,6 @@ func SaveOrgApply(apply *OrgApply, stub shim.ChaincodeStubInterface) (err error)
 	if err != nil {
 		return ecode.Errorf(ecode.ServerErr, "marshal apply error")
 	}
-
-<<<<<<< HEAD
-	if err = stub.PutState(constant.OrgApplyPrefix+apply.OrgId+":"+apply.FromUid, bytes); err != nil {
-		return err
-=======
 	if apply.Type == constant.CreateOrg {
 		if err = stub.PutState(constant.OrgApplyPrefix+apply.OrgId+":"+apply.FromUid, bytes); err != nil {
 			return err
@@ -34,7 +29,6 @@ func SaveOrgApply(apply *OrgApply, stub shim.ChaincodeStubInterface) (err error)
 		if err = stub.PutState(constant.OrgAttrApplyPrefix+apply.OrgId+":"+apply.FromUid, bytes); err != nil {
 			return err
 		}
->>>>>>> guomi
 	}
 	log.Println("save org apply with orgId: " + apply.OrgId + " success")
 	return

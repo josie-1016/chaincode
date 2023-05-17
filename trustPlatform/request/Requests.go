@@ -182,7 +182,7 @@ type GetBulletProofsRequest struct {
 type GetCommitsRequest struct {
 	Uid  string   `json:"uid"`
 	Pids []string `json:"pids"`
-
+}
 // 上传SM2密文申请
 type ShareSM2MessageRequest struct {
 	BaseRequest

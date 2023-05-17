@@ -19,10 +19,6 @@
 package base
 
 import (
-<<<<<<< HEAD
-	"context"
-=======
->>>>>>> guomi
 	"errors"
 	"fmt"
 
@@ -32,32 +28,18 @@ import (
 	"google.golang.org/grpc/resolver"
 )
 
-<<<<<<< HEAD
-type baseBuilder struct {
-	name            string
-	pickerBuilder   PickerBuilder
-	v2PickerBuilder V2PickerBuilder
-	config          Config
-=======
 var logger = grpclog.Component("balancer")
 
 type baseBuilder struct {
 	name          string
 	pickerBuilder PickerBuilder
 	config        Config
->>>>>>> guomi
 }
 
 func (bb *baseBuilder) Build(cc balancer.ClientConn, opt balancer.BuildOptions) balancer.Balancer {
 	bal := &baseBalancer{
-<<<<<<< HEAD
-		cc:              cc,
-		pickerBuilder:   bb.pickerBuilder,
-		v2PickerBuilder: bb.v2PickerBuilder,
-=======
 		cc:            cc,
 		pickerBuilder: bb.pickerBuilder,
->>>>>>> guomi
 
 		subConns: make(map[resolver.Address]balancer.SubConn),
 		scStates: make(map[balancer.SubConn]connectivity.State),
@@ -67,15 +49,7 @@ func (bb *baseBuilder) Build(cc balancer.ClientConn, opt balancer.BuildOptions) 
 	// Initialize picker to a picker that always returns
 	// ErrNoSubConnAvailable, because when state of a SubConn changes, we
 	// may call UpdateState with this picker.
-<<<<<<< HEAD
-	if bb.pickerBuilder != nil {
-		bal.picker = NewErrPicker(balancer.ErrNoSubConnAvailable)
-	} else {
-		bal.v2Picker = NewErrPickerV2(balancer.ErrNoSubConnAvailable)
-	}
-=======
 	bal.picker = NewErrPicker(balancer.ErrNoSubConnAvailable)
->>>>>>> guomi
 	return bal
 }
 
@@ -83,18 +57,9 @@ func (bb *baseBuilder) Name() string {
 	return bb.name
 }
 
-<<<<<<< HEAD
-var _ balancer.V2Balancer = (*baseBalancer)(nil) // Assert that we implement V2Balancer
-
-type baseBalancer struct {
-	cc              balancer.ClientConn
-	pickerBuilder   PickerBuilder
-	v2PickerBuilder V2PickerBuilder
-=======
 type baseBalancer struct {
 	cc            balancer.ClientConn
 	pickerBuilder PickerBuilder
->>>>>>> guomi
 
 	csEvltr *balancer.ConnectivityStateEvaluator
 	state   connectivity.State
@@ -102,55 +67,24 @@ type baseBalancer struct {
 	subConns map[resolver.Address]balancer.SubConn
 	scStates map[balancer.SubConn]connectivity.State
 	picker   balancer.Picker
-<<<<<<< HEAD
-	v2Picker balancer.V2Picker
-=======
->>>>>>> guomi
 	config   Config
 
 	resolverErr error // the last error reported by the resolver; cleared on successful resolution
 	connErr     error // the last connection error; cleared upon leaving TransientFailure
 }
 
-<<<<<<< HEAD
-func (b *baseBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) {
-	panic("not implemented")
-}
-
-=======
->>>>>>> guomi
 func (b *baseBalancer) ResolverError(err error) {
 	b.resolverErr = err
 	if len(b.subConns) == 0 {
 		b.state = connectivity.TransientFailure
 	}
-<<<<<<< HEAD
-=======
 
->>>>>>> guomi
 	if b.state != connectivity.TransientFailure {
 		// The picker will not change since the balancer does not currently
 		// report an error.
 		return
 	}
 	b.regeneratePicker()
-<<<<<<< HEAD
-	if b.picker != nil {
-		b.cc.UpdateBalancerState(b.state, b.picker)
-	} else {
-		b.cc.UpdateState(balancer.State{
-			ConnectivityState: b.state,
-			Picker:            b.v2Picker,
-		})
-	}
-}
-
-func (b *baseBalancer) UpdateClientConnState(s balancer.ClientConnState) error {
-	// TODO: handle s.ResolverState.Err (log if not nil) once implemented.
-	// TODO: handle s.ResolverState.ServiceConfig?
-	if grpclog.V(2) {
-		grpclog.Infoln("base.baseBalancer: got new ClientConn state: ", s)
-=======
 	b.cc.UpdateState(balancer.State{
 		ConnectivityState: b.state,
 		Picker:            b.picker,
@@ -161,7 +95,6 @@ func (b *baseBalancer) UpdateClientConnState(s balancer.ClientConnState) error {
 	// TODO: handle s.ResolverState.ServiceConfig?
 	if logger.V(2) {
 		logger.Info("base.baseBalancer: got new ClientConn state: ", s)
->>>>>>> guomi
 	}
 	// Successful resolution; clear resolver error and ensure we return nil.
 	b.resolverErr = nil
@@ -173,11 +106,7 @@ func (b *baseBalancer) UpdateClientConnState(s balancer.ClientConnState) error {
 			// a is a new address (not existing in b.subConns).
 			sc, err := b.cc.NewSubConn([]resolver.Address{a}, balancer.NewSubConnOptions{HealthCheckEnabled: b.config.HealthCheck})
 			if err != nil {
-<<<<<<< HEAD
-				grpclog.Warningf("base.baseBalancer: failed to create new SubConn: %v", err)
-=======
 				logger.Warningf("base.baseBalancer: failed to create new SubConn: %v", err)
->>>>>>> guomi
 				continue
 			}
 			b.subConns[a] = sc
@@ -191,11 +120,7 @@ func (b *baseBalancer) UpdateClientConnState(s balancer.ClientConnState) error {
 			b.cc.RemoveSubConn(sc)
 			delete(b.subConns, a)
 			// Keep the state of this sc in b.scStates until sc's state becomes Shutdown.
-<<<<<<< HEAD
-			// The entry will be deleted in HandleSubConnStateChange.
-=======
 			// The entry will be deleted in UpdateSubConnState.
->>>>>>> guomi
 		}
 	}
 	// If resolver state contains no addresses, return an error so ClientConn
@@ -229,40 +154,6 @@ func (b *baseBalancer) mergeErrors() error {
 //  - built by the pickerBuilder with all READY SubConns otherwise.
 func (b *baseBalancer) regeneratePicker() {
 	if b.state == connectivity.TransientFailure {
-<<<<<<< HEAD
-		if b.pickerBuilder != nil {
-			b.picker = NewErrPicker(balancer.ErrTransientFailure)
-		} else {
-			b.v2Picker = NewErrPickerV2(balancer.TransientFailureError(b.mergeErrors()))
-		}
-		return
-	}
-	if b.pickerBuilder != nil {
-		readySCs := make(map[resolver.Address]balancer.SubConn)
-
-		// Filter out all ready SCs from full subConn map.
-		for addr, sc := range b.subConns {
-			if st, ok := b.scStates[sc]; ok && st == connectivity.Ready {
-				readySCs[addr] = sc
-			}
-		}
-		b.picker = b.pickerBuilder.Build(readySCs)
-	} else {
-		readySCs := make(map[balancer.SubConn]SubConnInfo)
-
-		// Filter out all ready SCs from full subConn map.
-		for addr, sc := range b.subConns {
-			if st, ok := b.scStates[sc]; ok && st == connectivity.Ready {
-				readySCs[sc] = SubConnInfo{Address: addr}
-			}
-		}
-		b.v2Picker = b.v2PickerBuilder.Build(PickerBuildInfo{ReadySCs: readySCs})
-	}
-}
-
-func (b *baseBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectivity.State) {
-	panic("not implemented")
-=======
 		b.picker = NewErrPicker(b.mergeErrors())
 		return
 	}
@@ -275,20 +166,10 @@ func (b *baseBalancer) HandleSubConnStateChange(sc balancer.SubConn, s connectiv
 		}
 	}
 	b.picker = b.pickerBuilder.Build(PickerBuildInfo{ReadySCs: readySCs})
->>>>>>> guomi
 }
 
 func (b *baseBalancer) UpdateSubConnState(sc balancer.SubConn, state balancer.SubConnState) {
 	s := state.ConnectivityState
-<<<<<<< HEAD
-	if grpclog.V(2) {
-		grpclog.Infof("base.baseBalancer: handle SubConn state change: %p, %v", sc, s)
-	}
-	oldS, ok := b.scStates[sc]
-	if !ok {
-		if grpclog.V(2) {
-			grpclog.Infof("base.baseBalancer: got state changes for an unknown SubConn: %p, %v", sc, s)
-=======
 	if logger.V(2) {
 		logger.Infof("base.baseBalancer: handle SubConn state change: %p, %v", sc, s)
 	}
@@ -296,7 +177,6 @@ func (b *baseBalancer) UpdateSubConnState(sc balancer.SubConn, state balancer.Su
 	if !ok {
 		if logger.V(2) {
 			logger.Infof("base.baseBalancer: got state changes for an unknown SubConn: %p, %v", sc, s)
->>>>>>> guomi
 		}
 		return
 	}
@@ -330,15 +210,7 @@ func (b *baseBalancer) UpdateSubConnState(sc balancer.SubConn, state balancer.Su
 		b.regeneratePicker()
 	}
 
-<<<<<<< HEAD
-	if b.picker != nil {
-		b.cc.UpdateBalancerState(b.state, b.picker)
-	} else {
-		b.cc.UpdateState(balancer.State{ConnectivityState: b.state, Picker: b.v2Picker})
-	}
-=======
 	b.cc.UpdateState(balancer.State{ConnectivityState: b.state, Picker: b.picker})
->>>>>>> guomi
 }
 
 // Close is a nop because base balancer doesn't have internal state to clean up,
@@ -346,35 +218,11 @@ func (b *baseBalancer) UpdateSubConnState(sc balancer.SubConn, state balancer.Su
 func (b *baseBalancer) Close() {
 }
 
-<<<<<<< HEAD
-// NewErrPicker returns a picker that always returns err on Pick().
-=======
 // NewErrPicker returns a Picker that always returns err on Pick().
->>>>>>> guomi
 func NewErrPicker(err error) balancer.Picker {
 	return &errPicker{err: err}
 }
 
-<<<<<<< HEAD
-type errPicker struct {
-	err error // Pick() always returns this err.
-}
-
-func (p *errPicker) Pick(context.Context, balancer.PickInfo) (balancer.SubConn, func(balancer.DoneInfo), error) {
-	return nil, nil, p.err
-}
-
-// NewErrPickerV2 returns a V2Picker that always returns err on Pick().
-func NewErrPickerV2(err error) balancer.V2Picker {
-	return &errPickerV2{err: err}
-}
-
-type errPickerV2 struct {
-	err error // Pick() always returns this err.
-}
-
-func (p *errPickerV2) Pick(info balancer.PickInfo) (balancer.PickResult, error) {
-=======
 // NewErrPickerV2 is temporarily defined for backward compatibility reasons.
 //
 // Deprecated: use NewErrPicker instead.
@@ -385,6 +233,5 @@ type errPicker struct {
 }
 
 func (p *errPicker) Pick(info balancer.PickInfo) (balancer.PickResult, error) {
->>>>>>> guomi
 	return balancer.PickResult{}, p.err
 }

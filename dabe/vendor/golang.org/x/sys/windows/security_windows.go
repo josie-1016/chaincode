@@ -7,11 +7,8 @@ package windows
 import (
 	"syscall"
 	"unsafe"
-<<<<<<< HEAD
-=======
 
 	"golang.org/x/sys/internal/unsafeheader"
->>>>>>> guomi
 )
 
 const (
@@ -1234,11 +1231,7 @@ func (sd *SECURITY_DESCRIPTOR) String() string {
 		return ""
 	}
 	defer LocalFree(Handle(unsafe.Pointer(sddl)))
-<<<<<<< HEAD
-	return UTF16ToString((*[(1 << 30) - 1]uint16)(unsafe.Pointer(sddl))[:])
-=======
 	return UTF16PtrToString(sddl)
->>>>>>> guomi
 }
 
 // ToAbsolute converts a self-relative security descriptor into an absolute one.
@@ -1316,11 +1309,6 @@ func (absoluteSD *SECURITY_DESCRIPTOR) ToSelfRelative() (selfRelativeSD *SECURIT
 }
 
 func (selfRelativeSD *SECURITY_DESCRIPTOR) copySelfRelativeSecurityDescriptor() *SECURITY_DESCRIPTOR {
-<<<<<<< HEAD
-	sdBytes := make([]byte, selfRelativeSD.Length())
-	copy(sdBytes, (*[(1 << 31) - 1]byte)(unsafe.Pointer(selfRelativeSD))[:len(sdBytes)])
-	return (*SECURITY_DESCRIPTOR)(unsafe.Pointer(&sdBytes[0]))
-=======
 	sdLen := (int)(selfRelativeSD.Length())
 
 	var src []byte
@@ -1332,7 +1320,6 @@ func (selfRelativeSD *SECURITY_DESCRIPTOR) copySelfRelativeSecurityDescriptor() 
 	dst := make([]byte, sdLen)
 	copy(dst, src)
 	return (*SECURITY_DESCRIPTOR)(unsafe.Pointer(&dst[0]))
->>>>>>> guomi
 }
 
 // SecurityDescriptorFromString converts an SDDL string describing a security descriptor into a
@@ -1414,10 +1401,6 @@ func ACLFromEntries(explicitEntries []EXPLICIT_ACCESS, mergedACL *ACL) (acl *ACL
 	}
 	defer LocalFree(Handle(unsafe.Pointer(winHeapACL)))
 	aclBytes := make([]byte, winHeapACL.aclSize)
-<<<<<<< HEAD
-	copy(aclBytes, (*[(1 << 31) - 1]byte)(unsafe.Pointer(winHeapACL))[:len(aclBytes)])
-=======
 	copy(aclBytes, (*[(1 << 31) - 1]byte)(unsafe.Pointer(winHeapACL))[:len(aclBytes):len(aclBytes)])
->>>>>>> guomi
 	return (*ACL)(unsafe.Pointer(&aclBytes[0])), nil
 }

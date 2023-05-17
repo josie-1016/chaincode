@@ -20,27 +20,16 @@ package grpc
 
 import (
 	"encoding/json"
-<<<<<<< HEAD
-	"fmt"
-=======
 	"errors"
 	"fmt"
 	"reflect"
->>>>>>> guomi
 	"strconv"
 	"strings"
 	"time"
 
-<<<<<<< HEAD
-	"google.golang.org/grpc/balancer"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/internal"
-=======
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/internal"
 	internalserviceconfig "google.golang.org/grpc/internal/serviceconfig"
->>>>>>> guomi
 	"google.golang.org/grpc/serviceconfig"
 )
 
@@ -91,11 +80,7 @@ type ServiceConfig struct {
 	serviceconfig.Config
 
 	// LB is the load balancer the service providers recommends. The balancer
-<<<<<<< HEAD
-	// specified via grpc.WithBalancer will override this.  This is deprecated;
-=======
 	// specified via grpc.WithBalancerName will override this.  This is deprecated;
->>>>>>> guomi
 	// lbConfigs is preferred.  If lbConfig and LB are both present, lbConfig
 	// will be used.
 	LB *string
@@ -240,21 +225,6 @@ func parseDuration(s *string) (*time.Duration, error) {
 }
 
 type jsonName struct {
-<<<<<<< HEAD
-	Service *string
-	Method  *string
-}
-
-func (j jsonName) generatePath() (string, bool) {
-	if j.Service == nil {
-		return "", false
-	}
-	res := "/" + *j.Service + "/"
-	if j.Method != nil {
-		res += *j.Method
-	}
-	return res, true
-=======
 	Service string
 	Method  string
 }
@@ -276,7 +246,6 @@ func (j jsonName) generatePath() (string, error) {
 		res += j.Method
 	}
 	return res, nil
->>>>>>> guomi
 }
 
 // TODO(lyuxuan): delete this struct after cleaning up old service config implementation.
@@ -289,19 +258,10 @@ type jsonMC struct {
 	RetryPolicy             *jsonRetryPolicy
 }
 
-<<<<<<< HEAD
-type loadBalancingConfig map[string]json.RawMessage
-
-// TODO(lyuxuan): delete this struct after cleaning up old service config implementation.
-type jsonSC struct {
-	LoadBalancingPolicy *string
-	LoadBalancingConfig *[]loadBalancingConfig
-=======
 // TODO(lyuxuan): delete this struct after cleaning up old service config implementation.
 type jsonSC struct {
 	LoadBalancingPolicy *string
 	LoadBalancingConfig *internalserviceconfig.BalancerConfig
->>>>>>> guomi
 	MethodConfig        *[]jsonMC
 	RetryThrottling     *retryThrottlingPolicy
 	HealthCheckConfig   *healthCheckConfig
@@ -317,11 +277,7 @@ func parseServiceConfig(js string) *serviceconfig.ParseResult {
 	var rsc jsonSC
 	err := json.Unmarshal([]byte(js), &rsc)
 	if err != nil {
-<<<<<<< HEAD
-		grpclog.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
-=======
 		logger.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
->>>>>>> guomi
 		return &serviceconfig.ParseResult{Err: err}
 	}
 	sc := ServiceConfig{
@@ -331,69 +287,25 @@ func parseServiceConfig(js string) *serviceconfig.ParseResult {
 		healthCheckConfig: rsc.HealthCheckConfig,
 		rawJSONString:     js,
 	}
-<<<<<<< HEAD
-	if rsc.LoadBalancingConfig != nil {
-		for i, lbcfg := range *rsc.LoadBalancingConfig {
-			if len(lbcfg) != 1 {
-				err := fmt.Errorf("invalid loadBalancingConfig: entry %v does not contain exactly 1 policy/config pair: %q", i, lbcfg)
-				grpclog.Warningf(err.Error())
-				return &serviceconfig.ParseResult{Err: err}
-			}
-			var name string
-			var jsonCfg json.RawMessage
-			for name, jsonCfg = range lbcfg {
-			}
-			builder := balancer.Get(name)
-			if builder == nil {
-				continue
-			}
-			sc.lbConfig = &lbConfig{name: name}
-			if parser, ok := builder.(balancer.ConfigParser); ok {
-				var err error
-				sc.lbConfig.cfg, err = parser.ParseConfig(jsonCfg)
-				if err != nil {
-					return &serviceconfig.ParseResult{Err: fmt.Errorf("error parsing loadBalancingConfig for policy %q: %v", name, err)}
-				}
-			} else if string(jsonCfg) != "{}" {
-				grpclog.Warningf("non-empty balancer configuration %q, but balancer does not implement ParseConfig", string(jsonCfg))
-			}
-			break
-		}
-		if sc.lbConfig == nil {
-			// We had a loadBalancingConfig field but did not encounter a
-			// supported policy.  The config is considered invalid in this
-			// case.
-			err := fmt.Errorf("invalid loadBalancingConfig: no supported policies found")
-			grpclog.Warningf(err.Error())
-			return &serviceconfig.ParseResult{Err: err}
-=======
 	if c := rsc.LoadBalancingConfig; c != nil {
 		sc.lbConfig = &lbConfig{
 			name: c.Name,
 			cfg:  c.Config,
->>>>>>> guomi
 		}
 	}
 
 	if rsc.MethodConfig == nil {
 		return &serviceconfig.ParseResult{Config: &sc}
 	}
-<<<<<<< HEAD
-=======
 
 	paths := map[string]struct{}{}
->>>>>>> guomi
 	for _, m := range *rsc.MethodConfig {
 		if m.Name == nil {
 			continue
 		}
 		d, err := parseDuration(m.Timeout)
 		if err != nil {
-<<<<<<< HEAD
-			grpclog.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
-=======
 			logger.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
->>>>>>> guomi
 			return &serviceconfig.ParseResult{Err: err}
 		}
 
@@ -402,11 +314,7 @@ func parseServiceConfig(js string) *serviceconfig.ParseResult {
 			Timeout:      d,
 		}
 		if mc.retryPolicy, err = convertRetryPolicy(m.RetryPolicy); err != nil {
-<<<<<<< HEAD
-			grpclog.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
-=======
 			logger.Warningf("grpc: parseServiceConfig error unmarshaling %s due to %v", js, err)
->>>>>>> guomi
 			return &serviceconfig.ParseResult{Err: err}
 		}
 		if m.MaxRequestMessageBytes != nil {
@@ -423,12 +331,6 @@ func parseServiceConfig(js string) *serviceconfig.ParseResult {
 				mc.MaxRespSize = newInt(int(*m.MaxResponseMessageBytes))
 			}
 		}
-<<<<<<< HEAD
-		for _, n := range *m.Name {
-			if path, valid := n.generatePath(); valid {
-				sc.Methods[path] = mc
-			}
-=======
 		for i, n := range *m.Name {
 			path, err := n.generatePath()
 			if err != nil {
@@ -443,7 +345,6 @@ func parseServiceConfig(js string) *serviceconfig.ParseResult {
 			}
 			paths[path] = struct{}{}
 			sc.Methods[path] = mc
->>>>>>> guomi
 		}
 	}
 
@@ -476,11 +377,7 @@ func convertRetryPolicy(jrp *jsonRetryPolicy) (p *retryPolicy, err error) {
 		*mb <= 0 ||
 		jrp.BackoffMultiplier <= 0 ||
 		len(jrp.RetryableStatusCodes) == 0 {
-<<<<<<< HEAD
-		grpclog.Warningf("grpc: ignoring retry policy %v due to illegal configuration", jrp)
-=======
 		logger.Warningf("grpc: ignoring retry policy %v due to illegal configuration", jrp)
->>>>>>> guomi
 		return nil, nil
 	}
 
@@ -524,8 +421,6 @@ func getMaxSize(mcMax, doptMax *int, defaultVal int) *int {
 func newInt(b int) *int {
 	return &b
 }
-<<<<<<< HEAD
-=======
 
 func init() {
 	internal.EqualServiceConfigForTesting = equalServiceConfig
@@ -557,4 +452,3 @@ func equalServiceConfig(a, b serviceconfig.Config) bool {
 	// from unexported structs.
 	return reflect.DeepEqual(aa, bb)
 }
->>>>>>> guomi

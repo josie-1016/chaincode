@@ -20,8 +20,6 @@ func IoctlSetInt(fd int, req uint, value int) error {
 	return ioctl(fd, req, uintptr(value))
 }
 
-<<<<<<< HEAD
-=======
 // IoctlSetPointerInt performs an ioctl operation which sets an
 // integer value on fd, using the specified request number. The ioctl
 // argument is called with a pointer to the integer value, rather than
@@ -31,7 +29,6 @@ func IoctlSetPointerInt(fd int, req uint, value int) error {
 	return ioctl(fd, req, uintptr(unsafe.Pointer(&v)))
 }
 
->>>>>>> guomi
 // IoctlSetWinsize performs an ioctl on fd with a *Winsize argument.
 //
 // To change fd's window size, the req argument should be TIOCSWINSZ.

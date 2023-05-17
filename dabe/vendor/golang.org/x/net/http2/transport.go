@@ -108,8 +108,6 @@ type Transport struct {
 	// waiting for their turn.
 	StrictMaxConcurrentStreams bool
 
-<<<<<<< HEAD
-=======
 	// ReadIdleTimeout is the timeout after which a health check using ping
 	// frame will be carried out if no frame is received on the connection.
 	// Note that a ping response will is considered a received frame, so if
@@ -123,7 +121,6 @@ type Transport struct {
 	// Defaults to 15s.
 	PingTimeout time.Duration
 
->>>>>>> guomi
 	// t1, if non-nil, is the standard library Transport using
 	// this transport. Its settings are used (but not its
 	// RoundTrip method, etc).
@@ -147,8 +144,6 @@ func (t *Transport) disableCompression() bool {
 	return t.DisableCompression || (t.t1 != nil && t.t1.DisableCompression)
 }
 
-<<<<<<< HEAD
-=======
 func (t *Transport) pingTimeout() time.Duration {
 	if t.PingTimeout == 0 {
 		return 15 * time.Second
@@ -157,7 +152,6 @@ func (t *Transport) pingTimeout() time.Duration {
 
 }
 
->>>>>>> guomi
 // ConfigureTransport configures a net/http HTTP/1 Transport to use HTTP/2.
 // It returns an error if t1 has already been HTTP/2-enabled.
 func ConfigureTransport(t1 *http.Transport) error {
@@ -702,8 +696,6 @@ func (t *Transport) newClientConn(c net.Conn, singleUse bool) (*ClientConn, erro
 	return cc, nil
 }
 
-<<<<<<< HEAD
-=======
 func (cc *ClientConn) healthCheck() {
 	pingTimeout := cc.t.pingTimeout()
 	// We don't need to periodically ping in the health check, because the readLoop of ClientConn will
@@ -718,7 +710,6 @@ func (cc *ClientConn) healthCheck() {
 	}
 }
 
->>>>>>> guomi
 func (cc *ClientConn) setGoAway(f *GoAwayFrame) {
 	cc.mu.Lock()
 	defer cc.mu.Unlock()
@@ -890,23 +881,12 @@ func (cc *ClientConn) sendGoAway() error {
 	return nil
 }
 
-<<<<<<< HEAD
-// Close closes the client connection immediately.
-//
-// In-flight requests are interrupted. For a graceful shutdown, use Shutdown instead.
-func (cc *ClientConn) Close() error {
-	cc.mu.Lock()
-	defer cc.cond.Broadcast()
-	defer cc.mu.Unlock()
-	err := errors.New("http2: client connection force closed via ClientConn.Close")
-=======
 // closes the client connection immediately. In-flight requests are interrupted.
 // err is sent to streams.
 func (cc *ClientConn) closeForError(err error) error {
 	cc.mu.Lock()
 	defer cc.cond.Broadcast()
 	defer cc.mu.Unlock()
->>>>>>> guomi
 	for id, cs := range cc.streams {
 		select {
 		case cs.resc <- resAndError{err: err}:
@@ -919,8 +899,6 @@ func (cc *ClientConn) closeForError(err error) error {
 	return cc.tconn.Close()
 }
 
-<<<<<<< HEAD
-=======
 // Close closes the client connection immediately.
 //
 // In-flight requests are interrupted. For a graceful shutdown, use Shutdown instead.
@@ -935,7 +913,6 @@ func (cc *ClientConn) closeForLostPing() error {
 	return cc.closeForError(err)
 }
 
->>>>>>> guomi
 const maxAllocFrameSize = 512 << 10
 
 // frameBuffer returns a scratch buffer suitable for writing DATA frames.
@@ -1807,10 +1784,6 @@ func (rl *clientConnReadLoop) run() error {
 	rl.closeWhenIdle = cc.t.disableKeepAlives() || cc.singleUse
 	gotReply := false // ever saw a HEADERS reply
 	gotSettings := false
-<<<<<<< HEAD
-	for {
-		f, err := cc.fr.ReadFrame()
-=======
 	readIdleTimeout := cc.t.ReadIdleTimeout
 	var t *time.Timer
 	if readIdleTimeout != 0 {
@@ -1822,7 +1795,6 @@ func (rl *clientConnReadLoop) run() error {
 		if t != nil {
 			t.Reset(readIdleTimeout)
 		}
->>>>>>> guomi
 		if err != nil {
 			cc.vlogf("http2: Transport readFrame error on conn %p: (%T) %v", cc, err, err)
 		}
@@ -2034,13 +2006,8 @@ func (rl *clientConnReadLoop) handleResponse(cs *clientStream, f *MetaHeadersFra
 	if !streamEnded || isHead {
 		res.ContentLength = -1
 		if clens := res.Header["Content-Length"]; len(clens) == 1 {
-<<<<<<< HEAD
-			if clen64, err := strconv.ParseInt(clens[0], 10, 64); err == nil {
-				res.ContentLength = clen64
-=======
 			if cl, err := strconv.ParseUint(clens[0], 10, 63); err == nil {
 				res.ContentLength = int64(cl)
->>>>>>> guomi
 			} else {
 				// TODO: care? unlike http/1, it won't mess up our framing, so it's
 				// more safe smuggling-wise to ignore.
@@ -2558,10 +2525,7 @@ func strSliceContains(ss []string, s string) bool {
 
 type erringRoundTripper struct{ err error }
 
-<<<<<<< HEAD
-=======
 func (rt erringRoundTripper) RoundTripErr() error                             { return rt.err }
->>>>>>> guomi
 func (rt erringRoundTripper) RoundTrip(*http.Request) (*http.Response, error) { return nil, rt.err }
 
 // gzipReader wraps a response body so it can lazily

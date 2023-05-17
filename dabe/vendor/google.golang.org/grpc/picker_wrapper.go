@@ -20,100 +20,31 @@ package grpc
 
 import (
 	"context"
-<<<<<<< HEAD
-	"fmt"
-=======
->>>>>>> guomi
 	"io"
 	"sync"
 
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/codes"
-<<<<<<< HEAD
-	"google.golang.org/grpc/grpclog"
-=======
->>>>>>> guomi
 	"google.golang.org/grpc/internal/channelz"
 	"google.golang.org/grpc/internal/transport"
 	"google.golang.org/grpc/status"
 )
 
-<<<<<<< HEAD
-// v2PickerWrapper wraps a balancer.Picker while providing the
-// balancer.V2Picker API.  It requires a pickerWrapper to generate errors
-// including the latest connectionError.  To be deleted when balancer.Picker is
-// updated to the balancer.V2Picker API.
-type v2PickerWrapper struct {
-	picker  balancer.Picker
-	connErr *connErr
-}
-
-func (v *v2PickerWrapper) Pick(info balancer.PickInfo) (balancer.PickResult, error) {
-	sc, done, err := v.picker.Pick(info.Ctx, info)
-	if err != nil {
-		if err == balancer.ErrTransientFailure {
-			return balancer.PickResult{}, balancer.TransientFailureError(fmt.Errorf("%v, latest connection error: %v", err, v.connErr.connectionError()))
-		}
-		return balancer.PickResult{}, err
-	}
-	return balancer.PickResult{SubConn: sc, Done: done}, nil
-}
-
-=======
->>>>>>> guomi
 // pickerWrapper is a wrapper of balancer.Picker. It blocks on certain pick
 // actions and unblock when there's a picker update.
 type pickerWrapper struct {
 	mu         sync.Mutex
 	done       bool
 	blockingCh chan struct{}
-<<<<<<< HEAD
-	picker     balancer.V2Picker
-
-	// The latest connection error.  TODO: remove when V1 picker is deprecated;
-	// balancer should be responsible for providing the error.
-	*connErr
-}
-
-type connErr struct {
-	mu  sync.Mutex
-	err error
-}
-
-func (c *connErr) updateConnectionError(err error) {
-	c.mu.Lock()
-	c.err = err
-	c.mu.Unlock()
-}
-
-func (c *connErr) connectionError() error {
-	c.mu.Lock()
-	err := c.err
-	c.mu.Unlock()
-	return err
-}
-
-func newPickerWrapper() *pickerWrapper {
-	return &pickerWrapper{blockingCh: make(chan struct{}), connErr: &connErr{}}
-=======
 	picker     balancer.Picker
 }
 
 func newPickerWrapper() *pickerWrapper {
 	return &pickerWrapper{blockingCh: make(chan struct{})}
->>>>>>> guomi
 }
 
 // updatePicker is called by UpdateBalancerState. It unblocks all blocked pick.
 func (pw *pickerWrapper) updatePicker(p balancer.Picker) {
-<<<<<<< HEAD
-	pw.updatePickerV2(&v2PickerWrapper{picker: p, connErr: pw.connErr})
-}
-
-// updatePicker is called by UpdateBalancerState. It unblocks all blocked pick.
-func (pw *pickerWrapper) updatePickerV2(p balancer.V2Picker) {
-=======
->>>>>>> guomi
 	pw.mu.Lock()
 	if pw.done {
 		pw.mu.Unlock()
@@ -174,11 +105,6 @@ func (pw *pickerWrapper) pick(ctx context.Context, failfast bool, info balancer.
 				var errStr string
 				if lastPickErr != nil {
 					errStr = "latest balancer error: " + lastPickErr.Error()
-<<<<<<< HEAD
-				} else if connectionErr := pw.connectionError(); connectionErr != nil {
-					errStr = "latest connection error: " + connectionErr.Error()
-=======
->>>>>>> guomi
 				} else {
 					errStr = ctx.Err().Error()
 				}
@@ -203,20 +129,6 @@ func (pw *pickerWrapper) pick(ctx context.Context, failfast bool, info balancer.
 			if err == balancer.ErrNoSubConnAvailable {
 				continue
 			}
-<<<<<<< HEAD
-			if tfe, ok := err.(interface{ IsTransientFailure() bool }); ok && tfe.IsTransientFailure() {
-				if !failfast {
-					lastPickErr = err
-					continue
-				}
-				return nil, nil, status.Error(codes.Unavailable, err.Error())
-			}
-			if _, ok := status.FromError(err); ok {
-				return nil, nil, err
-			}
-			// err is some other error.
-			return nil, nil, status.Error(codes.Unknown, err.Error())
-=======
 			if _, ok := status.FromError(err); ok {
 				// Status error: end the RPC unconditionally with this status.
 				return nil, nil, err
@@ -228,16 +140,11 @@ func (pw *pickerWrapper) pick(ctx context.Context, failfast bool, info balancer.
 				continue
 			}
 			return nil, nil, status.Error(codes.Unavailable, err.Error())
->>>>>>> guomi
 		}
 
 		acw, ok := pickResult.SubConn.(*acBalancerWrapper)
 		if !ok {
-<<<<<<< HEAD
-			grpclog.Error("subconn returned from pick is not *acBalancerWrapper")
-=======
 			logger.Error("subconn returned from pick is not *acBalancerWrapper")
->>>>>>> guomi
 			continue
 		}
 		if t, ok := acw.getAddrConn().getReadyTransport(); ok {
@@ -251,11 +158,7 @@ func (pw *pickerWrapper) pick(ctx context.Context, failfast bool, info balancer.
 			// DoneInfo with default value works.
 			pickResult.Done(balancer.DoneInfo{})
 		}
-<<<<<<< HEAD
-		grpclog.Infof("blockingPicker: the picked transport is not ready, loop back to repick")
-=======
 		logger.Infof("blockingPicker: the picked transport is not ready, loop back to repick")
->>>>>>> guomi
 		// If ok == false, ac.state is not READY.
 		// A valid picker always returns READY subConn. This means the state of ac
 		// just changed, and picker will be updated shortly.

@@ -39,10 +39,7 @@ import (
 	"golang.org/x/net/http2"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
-<<<<<<< HEAD
-=======
 	"google.golang.org/grpc/internal/grpcutil"
->>>>>>> guomi
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
 	"google.golang.org/grpc/stats"
@@ -61,11 +58,7 @@ func NewServerHandlerTransport(w http.ResponseWriter, r *http.Request, stats sta
 	}
 	contentType := r.Header.Get("Content-Type")
 	// TODO: do we assume contentType is lowercase? we did before
-<<<<<<< HEAD
-	contentSubtype, validContentType := contentSubtype(contentType)
-=======
 	contentSubtype, validContentType := grpcutil.ContentSubtype(contentType)
->>>>>>> guomi
 	if !validContentType {
 		return nil, errors.New("invalid gRPC request content-type")
 	}

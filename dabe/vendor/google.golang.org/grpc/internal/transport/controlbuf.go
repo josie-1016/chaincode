@@ -505,13 +505,9 @@ func (l *loopyWriter) run() (err error) {
 			// 1. When the connection is closed by some other known issue.
 			// 2. User closed the connection.
 			// 3. A graceful close of connection.
-<<<<<<< HEAD
-			infof("transport: loopyWriter.run returning. %v", err)
-=======
 			if logger.V(logLevel) {
 				logger.Infof("transport: loopyWriter.run returning. %v", err)
 			}
->>>>>>> guomi
 			err = nil
 		}
 	}()
@@ -611,13 +607,9 @@ func (l *loopyWriter) headerHandler(h *headerFrame) error {
 	if l.side == serverSide {
 		str, ok := l.estdStreams[h.streamID]
 		if !ok {
-<<<<<<< HEAD
-			warningf("transport: loopy doesn't recognize the stream: %d", h.streamID)
-=======
 			if logger.V(logLevel) {
 				logger.Warningf("transport: loopy doesn't recognize the stream: %d", h.streamID)
 			}
->>>>>>> guomi
 			return nil
 		}
 		// Case 1.A: Server is responding back with headers.
@@ -670,13 +662,9 @@ func (l *loopyWriter) writeHeader(streamID uint32, endStream bool, hf []hpack.He
 	l.hBuf.Reset()
 	for _, f := range hf {
 		if err := l.hEnc.WriteField(f); err != nil {
-<<<<<<< HEAD
-			warningf("transport: loopyWriter.writeHeader encountered error while encoding headers:", err)
-=======
 			if logger.V(logLevel) {
 				logger.Warningf("transport: loopyWriter.writeHeader encountered error while encoding headers: %v", err)
 			}
->>>>>>> guomi
 		}
 	}
 	var (
@@ -875,31 +863,6 @@ func (l *loopyWriter) processData() (bool, error) {
 		return false, nil
 	}
 	var (
-<<<<<<< HEAD
-		idx int
-		buf []byte
-	)
-	if len(dataItem.h) != 0 { // data header has not been written out yet.
-		buf = dataItem.h
-	} else {
-		idx = 1
-		buf = dataItem.d
-	}
-	size := http2MaxFrameLen
-	if len(buf) < size {
-		size = len(buf)
-	}
-	if strQuota := int(l.oiws) - str.bytesOutStanding; strQuota <= 0 { // stream-level flow control.
-		str.state = waitingOnStreamQuota
-		return false, nil
-	} else if strQuota < size {
-		size = strQuota
-	}
-
-	if l.sendQuota < uint32(size) { // connection-level flow control.
-		size = int(l.sendQuota)
-	}
-=======
 		buf []byte
 	)
 	// Figure out the maximum size we can send
@@ -933,21 +896,12 @@ func (l *loopyWriter) processData() (bool, error) {
 
 	size := hSize + dSize
 
->>>>>>> guomi
 	// Now that outgoing flow controls are checked we can replenish str's write quota
 	str.wq.replenish(size)
 	var endStream bool
 	// If this is the last data message on this stream and all of it can be written in this iteration.
-<<<<<<< HEAD
-	if dataItem.endStream && size == len(buf) {
-		// buf contains either data or it contains header but data is empty.
-		if idx == 1 || len(dataItem.d) == 0 {
-			endStream = true
-		}
-=======
 	if dataItem.endStream && len(dataItem.h)+len(dataItem.d) <= size {
 		endStream = true
->>>>>>> guomi
 	}
 	if dataItem.onEachWrite != nil {
 		dataItem.onEachWrite()
@@ -955,21 +909,10 @@ func (l *loopyWriter) processData() (bool, error) {
 	if err := l.framer.fr.WriteData(dataItem.streamID, endStream, buf[:size]); err != nil {
 		return false, err
 	}
-<<<<<<< HEAD
-	buf = buf[size:]
-	str.bytesOutStanding += size
-	l.sendQuota -= uint32(size)
-	if idx == 0 {
-		dataItem.h = buf
-	} else {
-		dataItem.d = buf
-	}
-=======
 	str.bytesOutStanding += size
 	l.sendQuota -= uint32(size)
 	dataItem.h = dataItem.h[hSize:]
 	dataItem.d = dataItem.d[dSize:]
->>>>>>> guomi
 
 	if len(dataItem.h) == 0 && len(dataItem.d) == 0 { // All the data from that message was written out.
 		str.itl.dequeue()
@@ -990,8 +933,6 @@ func (l *loopyWriter) processData() (bool, error) {
 	}
 	return false, nil
 }
-<<<<<<< HEAD
-=======
 
 func min(a, b int) int {
 	if a < b {
@@ -999,4 +940,3 @@ func min(a, b int) int {
 	}
 	return b
 }
->>>>>>> guomi

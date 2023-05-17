@@ -18,11 +18,8 @@
  *
  */
 
-<<<<<<< HEAD
-=======
 // Package syscall provides functionalities that grpc uses to get low-level
 // operating system stats/info.
->>>>>>> guomi
 package syscall
 
 import (
@@ -34,18 +31,11 @@ import (
 )
 
 var once sync.Once
-<<<<<<< HEAD
-
-func log() {
-	once.Do(func() {
-		grpclog.Info("CPU time info is unavailable on non-linux or appengine environment.")
-=======
 var logger = grpclog.Component("core")
 
 func log() {
 	once.Do(func() {
 		logger.Info("CPU time info is unavailable on non-linux or appengine environment.")
->>>>>>> guomi
 	})
 }
 

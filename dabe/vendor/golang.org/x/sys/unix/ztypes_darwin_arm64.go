@@ -151,13 +151,10 @@ type Dirent struct {
 	_       [3]byte
 }
 
-<<<<<<< HEAD
-=======
 const (
 	PathMax = 0x400
 )
 
->>>>>>> guomi
 type RawSockaddrInet4 struct {
 	Len    uint8
 	Family uint8

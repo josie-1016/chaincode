@@ -8,12 +8,6 @@ import "runtime"
 
 const cacheLineSize = 64
 
-<<<<<<< HEAD
-func init() {
-	switch runtime.GOOS {
-	case "android", "darwin":
-		// Android and iOS don't seem to allow reading these registers.
-=======
 func initOptions() {
 	options = []option{
 		{Name: "fp", Feature: &ARM64.HasFP},
@@ -53,7 +47,6 @@ func archInit() {
 		// It can be read via sysctl(3). Example for future implementers:
 		// https://nxr.netbsd.org/xref/src/usr.sbin/cpuctl/arch/aarch64.c
 		//
->>>>>>> guomi
 		// Fake the minimal features expected by
 		// TestARM64minimalFeatures.
 		ARM64.HasASIMD = true

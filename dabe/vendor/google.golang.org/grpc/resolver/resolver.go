@@ -85,14 +85,10 @@ const (
 	Backend AddressType = iota
 	// GRPCLB indicates the address is for a grpclb load balancer.
 	//
-<<<<<<< HEAD
-	// Deprecated: use Attributes in Address instead.
-=======
 	// Deprecated: to select the GRPCLB load balancing policy, use a service
 	// config with a corresponding loadBalancingConfig.  To supply balancer
 	// addresses to the GRPCLB load balancing policy, set State.Attributes
 	// using balancer/grpclb/state.Set.
->>>>>>> guomi
 	GRPCLB
 )
 

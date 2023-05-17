@@ -25,10 +25,7 @@ import (
 	"os"
 
 	"google.golang.org/grpc/grpclog"
-<<<<<<< HEAD
-=======
 	"google.golang.org/grpc/internal/grpcutil"
->>>>>>> guomi
 )
 
 // Logger is the global binary logger. It can be used to get binary logger for
@@ -43,11 +40,8 @@ type Logger interface {
 // It is used to get a methodLogger for each individual method.
 var binLogger Logger
 
-<<<<<<< HEAD
-=======
 var grpclogLogger = grpclog.Component("binarylog")
 
->>>>>>> guomi
 // SetLogger sets the binarg logger.
 //
 // Only call this at init time.
@@ -155,15 +149,9 @@ func (l *logger) setBlacklist(method string) error {
 // Each methodLogger returned by this method is a new instance. This is to
 // generate sequence id within the call.
 func (l *logger) getMethodLogger(methodName string) *MethodLogger {
-<<<<<<< HEAD
-	s, m, err := parseMethodName(methodName)
-	if err != nil {
-		grpclog.Infof("binarylogging: failed to parse %q: %v", methodName, err)
-=======
 	s, m, err := grpcutil.ParseMethod(methodName)
 	if err != nil {
 		grpclogLogger.Infof("binarylogging: failed to parse %q: %v", methodName, err)
->>>>>>> guomi
 		return nil
 	}
 	if ml, ok := l.methods[s+"/"+m]; ok {

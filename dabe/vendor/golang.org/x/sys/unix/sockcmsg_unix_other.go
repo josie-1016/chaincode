@@ -20,11 +20,7 @@ func cmsgAlignOf(salen int) int {
 	case "aix":
 		// There is no alignment on AIX.
 		salign = 1
-<<<<<<< HEAD
-	case "darwin", "illumos", "solaris":
-=======
 	case "darwin", "ios", "illumos", "solaris":
->>>>>>> guomi
 		// NOTE: It seems like 64-bit Darwin, Illumos and Solaris
 		// kernels still require 32-bit aligned access to network
 		// subsystem.
@@ -36,13 +32,10 @@ func cmsgAlignOf(salen int) int {
 		if runtime.GOARCH == "arm" {
 			salign = 8
 		}
-<<<<<<< HEAD
-=======
 		// NetBSD aarch64 requires 128-bit alignment.
 		if runtime.GOOS == "netbsd" && runtime.GOARCH == "arm64" {
 			salign = 16
 		}
->>>>>>> guomi
 	}
 
 	return (salen + salign - 1) & ^(salign - 1)

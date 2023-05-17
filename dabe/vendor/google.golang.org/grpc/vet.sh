@@ -39,12 +39,7 @@ if [[ "$1" = "-install" ]]; then
       golang.org/x/lint/golint \
       golang.org/x/tools/cmd/goimports \
       honnef.co/go/tools/cmd/staticcheck \
-<<<<<<< HEAD
-      github.com/client9/misspell/cmd/misspell \
-      github.com/golang/protobuf/protoc-gen-go
-=======
       github.com/client9/misspell/cmd/misspell
->>>>>>> guomi
     popd
   else
     # Ye olde `go get` incantation.
@@ -54,12 +49,7 @@ if [[ "$1" = "-install" ]]; then
       golang.org/x/lint/golint \
       golang.org/x/tools/cmd/goimports \
       honnef.co/go/tools/cmd/staticcheck \
-<<<<<<< HEAD
-      github.com/client9/misspell/cmd/misspell \
-      github.com/golang/protobuf/protoc-gen-go
-=======
       github.com/client9/misspell/cmd/misspell
->>>>>>> guomi
   fi
   if [[ -z "${VET_SKIP_PROTO}" ]]; then
     if [[ "${TRAVIS}" = "true" ]]; then
@@ -96,12 +86,9 @@ git grep -l '"math/rand"' -- "*.go" 2>&1 | not grep -v '^examples\|^stress\|grpc
 # - Ensure all ptypes proto packages are renamed when importing.
 not git grep "\(import \|^\s*\)\"github.com/golang/protobuf/ptypes/" -- "*.go"
 
-<<<<<<< HEAD
-=======
 # - Ensure all xds proto imports are renamed to *pb or *grpc.
 git grep '"github.com/envoyproxy/go-control-plane/envoy' -- '*.go' | not grep -v 'pb "\|grpc "'
 
->>>>>>> guomi
 # - Check imports that are illegal in appengine (until Go 1.11).
 # TODO: Remove when we drop Go 1.10 support
 go list -f {{.Dir}} ./... | xargs go run test/go_vet/vet.go
@@ -121,17 +108,10 @@ if [[ -z "${VET_SKIP_PROTO}" ]]; then
     (git status; git --no-pager diff; exit 1)
 fi
 
-<<<<<<< HEAD
-# - Check that our module is tidy.
-if go help mod >& /dev/null; then
-  go mod tidy && \
-    git status --porcelain 2>&1 | fail_on_output || \
-=======
 # - Check that our modules are tidy.
 if go help mod >& /dev/null; then
   find . -name 'go.mod' | xargs -IXXX bash -c 'cd $(dirname XXX); go mod tidy'
   git status --porcelain 2>&1 | fail_on_output || \
->>>>>>> guomi
     (git status; git --no-pager diff; exit 1)
 fi
 
@@ -144,16 +124,6 @@ staticcheck -go 1.9 -checks 'inherit,-ST1015' ./... > "${SC_OUT}" || true
 # Error if anything other than deprecation warnings are printed.
 not grep -v "is deprecated:.*SA1019" "${SC_OUT}"
 # Only ignore the following deprecated types/fields/functions.
-<<<<<<< HEAD
-not grep -Fv '.HandleResolvedAddrs
-.HandleSubConnStateChange
-.HeaderMap
-.NewAddress
-.NewServiceConfig
-.Metadata is deprecated: use Attributes
-.Type is deprecated: use Attributes
-.UpdateBalancerState
-=======
 not grep -Fv '.CredsBundle
 .HeaderMap
 .Metadata is deprecated: use Attributes
@@ -161,15 +131,11 @@ not grep -Fv '.CredsBundle
 .NewServiceConfig
 .Type is deprecated: use Attributes
 balancer.ErrTransientFailure
->>>>>>> guomi
 balancer.Picker
 grpc.CallCustomCodec
 grpc.Code
 grpc.Compressor
-<<<<<<< HEAD
-=======
 grpc.CustomCodec
->>>>>>> guomi
 grpc.Decompressor
 grpc.MaxMsgSize
 grpc.MethodConfig
@@ -177,13 +143,7 @@ grpc.NewGZIPCompressor
 grpc.NewGZIPDecompressor
 grpc.RPCCompressor
 grpc.RPCDecompressor
-<<<<<<< HEAD
-grpc.RoundRobin
 grpc.ServiceConfig
-grpc.WithBalancer
-=======
-grpc.ServiceConfig
->>>>>>> guomi
 grpc.WithBalancerName
 grpc.WithCompressor
 grpc.WithDecompressor
@@ -193,14 +153,6 @@ grpc.WithServiceConfig
 grpc.WithTimeout
 http.CloseNotifier
 info.SecurityVersion
-<<<<<<< HEAD
-naming.Resolver
-naming.Update
-naming.Watcher
-resolver.Backend
-resolver.GRPCLB' "${SC_OUT}"
-
-=======
 resolver.Backend
 resolver.GRPCLB' "${SC_OUT}"
 
@@ -235,5 +187,4 @@ lint_package_comment() {
 }
 lint_package_comment
 
->>>>>>> guomi
 echo SUCCESS

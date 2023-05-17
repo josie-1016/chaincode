@@ -11,10 +11,7 @@ package cpu
 // rules are good enough.
 
 const cacheLineSize = 0
-<<<<<<< HEAD
-=======
 
 func initOptions() {}
 
 func archInit() {}
->>>>>>> guomi

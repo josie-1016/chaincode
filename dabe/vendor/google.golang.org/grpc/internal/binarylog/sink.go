@@ -29,10 +29,6 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	pb "google.golang.org/grpc/binarylog/grpc_binarylog_v1"
-<<<<<<< HEAD
-	"google.golang.org/grpc/grpclog"
-=======
->>>>>>> guomi
 )
 
 var (
@@ -81,11 +77,7 @@ type writerSink struct {
 func (ws *writerSink) Write(e *pb.GrpcLogEntry) error {
 	b, err := proto.Marshal(e)
 	if err != nil {
-<<<<<<< HEAD
-		grpclog.Infof("binary logging: failed to marshal proto message: %v", err)
-=======
 		grpclogLogger.Infof("binary logging: failed to marshal proto message: %v", err)
->>>>>>> guomi
 	}
 	hdr := make([]byte, 4)
 	binary.BigEndian.PutUint32(hdr, uint32(len(b)))

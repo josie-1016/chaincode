@@ -4,11 +4,6 @@
 
 package cpu
 
-<<<<<<< HEAD
-const cacheLineSize = 256
-
-=======
->>>>>>> guomi
 const (
 	// bit mask values from /usr/include/bits/hwcap.h
 	hwcap_ZARCH  = 2

@@ -7,11 +7,6 @@
 
 package cpu
 
-<<<<<<< HEAD
-const cacheLineSize = 128
-
-=======
->>>>>>> guomi
 // HWCAP/HWCAP2 bits. These are exposed by the kernel.
 const (
 	// ISA Level

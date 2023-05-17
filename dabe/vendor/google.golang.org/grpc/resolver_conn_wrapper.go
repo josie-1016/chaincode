@@ -140,11 +140,7 @@ func (ccr *ccResolverWrapper) UpdateState(s resolver.State) {
 	if ccr.done.HasFired() {
 		return
 	}
-<<<<<<< HEAD
-	channelz.Infof(ccr.cc.channelzID, "ccResolverWrapper: sending update to cc: %v", s)
-=======
 	channelz.Infof(logger, ccr.cc.channelzID, "ccResolverWrapper: sending update to cc: %v", s)
->>>>>>> guomi
 	if channelz.IsOn() {
 		ccr.addChannelzTraceEvent(s)
 	}
@@ -156,11 +152,7 @@ func (ccr *ccResolverWrapper) ReportError(err error) {
 	if ccr.done.HasFired() {
 		return
 	}
-<<<<<<< HEAD
-	channelz.Warningf(ccr.cc.channelzID, "ccResolverWrapper: reporting error to cc: %v", err)
-=======
 	channelz.Warningf(logger, ccr.cc.channelzID, "ccResolverWrapper: reporting error to cc: %v", err)
->>>>>>> guomi
 	ccr.poll(ccr.cc.updateResolverState(resolver.State{}, err))
 }
 
@@ -169,11 +161,7 @@ func (ccr *ccResolverWrapper) NewAddress(addrs []resolver.Address) {
 	if ccr.done.HasFired() {
 		return
 	}
-<<<<<<< HEAD
-	channelz.Infof(ccr.cc.channelzID, "ccResolverWrapper: sending new addresses to cc: %v", addrs)
-=======
 	channelz.Infof(logger, ccr.cc.channelzID, "ccResolverWrapper: sending new addresses to cc: %v", addrs)
->>>>>>> guomi
 	if channelz.IsOn() {
 		ccr.addChannelzTraceEvent(resolver.State{Addresses: addrs, ServiceConfig: ccr.curState.ServiceConfig})
 	}
@@ -187,24 +175,14 @@ func (ccr *ccResolverWrapper) NewServiceConfig(sc string) {
 	if ccr.done.HasFired() {
 		return
 	}
-<<<<<<< HEAD
-	channelz.Infof(ccr.cc.channelzID, "ccResolverWrapper: got new service config: %v", sc)
-	if ccr.cc.dopts.disableServiceConfig {
-		channelz.Info(ccr.cc.channelzID, "Service config lookups disabled; ignoring config")
-=======
 	channelz.Infof(logger, ccr.cc.channelzID, "ccResolverWrapper: got new service config: %v", sc)
 	if ccr.cc.dopts.disableServiceConfig {
 		channelz.Info(logger, ccr.cc.channelzID, "Service config lookups disabled; ignoring config")
->>>>>>> guomi
 		return
 	}
 	scpr := parseServiceConfig(sc)
 	if scpr.Err != nil {
-<<<<<<< HEAD
-		channelz.Warningf(ccr.cc.channelzID, "ccResolverWrapper: error parsing service config: %v", scpr.Err)
-=======
 		channelz.Warningf(logger, ccr.cc.channelzID, "ccResolverWrapper: error parsing service config: %v", scpr.Err)
->>>>>>> guomi
 		ccr.poll(balancer.ErrBadResolverState)
 		return
 	}
@@ -237,11 +215,7 @@ func (ccr *ccResolverWrapper) addChannelzTraceEvent(s resolver.State) {
 	} else if len(ccr.curState.Addresses) == 0 && len(s.Addresses) > 0 {
 		updates = append(updates, "resolver returned new addresses")
 	}
-<<<<<<< HEAD
-	channelz.AddTraceEvent(ccr.cc.channelzID, 0, &channelz.TraceEventDesc{
-=======
 	channelz.AddTraceEvent(logger, ccr.cc.channelzID, 0, &channelz.TraceEventDesc{
->>>>>>> guomi
 		Desc:     fmt.Sprintf("Resolver state updated: %+v (%v)", s, strings.Join(updates, "; ")),
 		Severity: channelz.CtINFO,
 	})

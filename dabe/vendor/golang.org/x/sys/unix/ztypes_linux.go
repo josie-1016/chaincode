@@ -18,14 +18,11 @@ type (
 	_C_long_long int64
 )
 
-<<<<<<< HEAD
-=======
 type ItimerSpec struct {
 	Interval Timespec
 	Value    Timespec
 }
 
->>>>>>> guomi
 const (
 	TIME_OK    = 0x0
 	TIME_INS   = 0x1
@@ -70,21 +67,15 @@ type Statx_t struct {
 	Rdev_minor      uint32
 	Dev_major       uint32
 	Dev_minor       uint32
-<<<<<<< HEAD
-	_               [14]uint64
-=======
 	Mnt_id          uint64
 	_               uint64
 	_               [12]uint64
->>>>>>> guomi
 }
 
 type Fsid struct {
 	Val [2]int32
 }
 
-<<<<<<< HEAD
-=======
 type FileCloneRange struct {
 	Src_fd      int64
 	Src_offset  uint64
@@ -100,7 +91,6 @@ type FileDedupeRange struct {
 	Reserved2  uint32
 }
 
->>>>>>> guomi
 type FscryptPolicy struct {
 	Version                   uint8
 	Contents_encryption_mode  uint8
@@ -146,12 +136,8 @@ type FscryptKeySpecifier struct {
 type FscryptAddKeyArg struct {
 	Key_spec FscryptKeySpecifier
 	Raw_size uint32
-<<<<<<< HEAD
-	_        [9]uint32
-=======
 	Key_id   uint32
 	_        [8]uint32
->>>>>>> guomi
 }
 
 type FscryptRemoveKeyArg struct {
@@ -169,8 +155,6 @@ type FscryptGetKeyStatusArg struct {
 	_            [13]uint32
 }
 
-<<<<<<< HEAD
-=======
 type DmIoctl struct {
 	Version      [3]uint32
 	Data_size    uint32
@@ -213,7 +197,6 @@ const (
 	SizeofDmTargetSpec = 0x28
 )
 
->>>>>>> guomi
 type KeyctlDHParams struct {
 	Private int32
 	Prime   int32
@@ -342,8 +325,6 @@ type RawSockaddrL2TPIP6 struct {
 	Conn_id  uint32
 }
 
-<<<<<<< HEAD
-=======
 type RawSockaddrIUCV struct {
 	Family  uint16
 	Port    uint16
@@ -353,7 +334,6 @@ type RawSockaddrIUCV struct {
 	Name    [8]int8
 }
 
->>>>>>> guomi
 type _Socklen uint32
 
 type Linger struct {
@@ -466,10 +446,7 @@ const (
 	SizeofSockaddrTIPC      = 0x10
 	SizeofSockaddrL2TPIP    = 0x10
 	SizeofSockaddrL2TPIP6   = 0x20
-<<<<<<< HEAD
-=======
 	SizeofSockaddrIUCV      = 0x20
->>>>>>> guomi
 	SizeofLinger            = 0x8
 	SizeofIPMreq            = 0x8
 	SizeofIPMreqn           = 0xc
@@ -577,11 +554,7 @@ const (
 	IFLA_NEW_IFINDEX        = 0x31
 	IFLA_MIN_MTU            = 0x32
 	IFLA_MAX_MTU            = 0x33
-<<<<<<< HEAD
-	IFLA_MAX                = 0x35
-=======
 	IFLA_MAX                = 0x36
->>>>>>> guomi
 	IFLA_INFO_KIND          = 0x1
 	IFLA_INFO_DATA          = 0x2
 	IFLA_INFO_XSTATS        = 0x3
@@ -767,11 +740,8 @@ type InotifyEvent struct {
 
 const SizeofInotifyEvent = 0x10
 
-<<<<<<< HEAD
-=======
 const SI_LOAD_SHIFT = 0x10
 
->>>>>>> guomi
 type Utsname struct {
 	Sysname    [65]byte
 	Nodename   [65]byte
@@ -797,8 +767,6 @@ const (
 	AT_EACCESS = 0x200
 )
 
-<<<<<<< HEAD
-=======
 type OpenHow struct {
 	Flags   uint64
 	Mode    uint64
@@ -815,7 +783,6 @@ const (
 	RESOLVE_NO_XDEV       = 0x1
 )
 
->>>>>>> guomi
 type PollFd struct {
 	Fd      int32
 	Events  int16
@@ -1080,8 +1047,6 @@ const (
 	PERF_SAMPLE_STREAM_ID    = 0x200
 	PERF_SAMPLE_RAW          = 0x400
 	PERF_SAMPLE_BRANCH_STACK = 0x800
-<<<<<<< HEAD
-=======
 	PERF_SAMPLE_REGS_USER    = 0x1000
 	PERF_SAMPLE_STACK_USER   = 0x2000
 	PERF_SAMPLE_WEIGHT       = 0x4000
@@ -1089,7 +1054,6 @@ const (
 	PERF_SAMPLE_IDENTIFIER   = 0x10000
 	PERF_SAMPLE_TRANSACTION  = 0x20000
 	PERF_SAMPLE_REGS_INTR    = 0x40000
->>>>>>> guomi
 
 	PERF_SAMPLE_BRANCH_USER       = 0x1
 	PERF_SAMPLE_BRANCH_KERNEL     = 0x2
@@ -1819,8 +1783,6 @@ const (
 	NFT_NG_RANDOM                     = 0x1
 )
 
-<<<<<<< HEAD
-=======
 const (
 	NFTA_TARGET_UNSPEC = 0x0
 	NFTA_TARGET_NAME   = 0x1
@@ -1836,7 +1798,6 @@ const (
 	NFTA_COMPAT_TYPE   = 0x3
 )
 
->>>>>>> guomi
 type RTCTime struct {
 	Sec   int32
 	Min   int32
@@ -2019,177 +1980,6 @@ const (
 )
 
 const (
-<<<<<<< HEAD
-	BPF_REG_0                             = 0x0
-	BPF_REG_1                             = 0x1
-	BPF_REG_2                             = 0x2
-	BPF_REG_3                             = 0x3
-	BPF_REG_4                             = 0x4
-	BPF_REG_5                             = 0x5
-	BPF_REG_6                             = 0x6
-	BPF_REG_7                             = 0x7
-	BPF_REG_8                             = 0x8
-	BPF_REG_9                             = 0x9
-	BPF_REG_10                            = 0xa
-	BPF_MAP_CREATE                        = 0x0
-	BPF_MAP_LOOKUP_ELEM                   = 0x1
-	BPF_MAP_UPDATE_ELEM                   = 0x2
-	BPF_MAP_DELETE_ELEM                   = 0x3
-	BPF_MAP_GET_NEXT_KEY                  = 0x4
-	BPF_PROG_LOAD                         = 0x5
-	BPF_OBJ_PIN                           = 0x6
-	BPF_OBJ_GET                           = 0x7
-	BPF_PROG_ATTACH                       = 0x8
-	BPF_PROG_DETACH                       = 0x9
-	BPF_PROG_TEST_RUN                     = 0xa
-	BPF_PROG_GET_NEXT_ID                  = 0xb
-	BPF_MAP_GET_NEXT_ID                   = 0xc
-	BPF_PROG_GET_FD_BY_ID                 = 0xd
-	BPF_MAP_GET_FD_BY_ID                  = 0xe
-	BPF_OBJ_GET_INFO_BY_FD                = 0xf
-	BPF_PROG_QUERY                        = 0x10
-	BPF_RAW_TRACEPOINT_OPEN               = 0x11
-	BPF_BTF_LOAD                          = 0x12
-	BPF_BTF_GET_FD_BY_ID                  = 0x13
-	BPF_TASK_FD_QUERY                     = 0x14
-	BPF_MAP_LOOKUP_AND_DELETE_ELEM        = 0x15
-	BPF_MAP_FREEZE                        = 0x16
-	BPF_BTF_GET_NEXT_ID                   = 0x17
-	BPF_MAP_TYPE_UNSPEC                   = 0x0
-	BPF_MAP_TYPE_HASH                     = 0x1
-	BPF_MAP_TYPE_ARRAY                    = 0x2
-	BPF_MAP_TYPE_PROG_ARRAY               = 0x3
-	BPF_MAP_TYPE_PERF_EVENT_ARRAY         = 0x4
-	BPF_MAP_TYPE_PERCPU_HASH              = 0x5
-	BPF_MAP_TYPE_PERCPU_ARRAY             = 0x6
-	BPF_MAP_TYPE_STACK_TRACE              = 0x7
-	BPF_MAP_TYPE_CGROUP_ARRAY             = 0x8
-	BPF_MAP_TYPE_LRU_HASH                 = 0x9
-	BPF_MAP_TYPE_LRU_PERCPU_HASH          = 0xa
-	BPF_MAP_TYPE_LPM_TRIE                 = 0xb
-	BPF_MAP_TYPE_ARRAY_OF_MAPS            = 0xc
-	BPF_MAP_TYPE_HASH_OF_MAPS             = 0xd
-	BPF_MAP_TYPE_DEVMAP                   = 0xe
-	BPF_MAP_TYPE_SOCKMAP                  = 0xf
-	BPF_MAP_TYPE_CPUMAP                   = 0x10
-	BPF_MAP_TYPE_XSKMAP                   = 0x11
-	BPF_MAP_TYPE_SOCKHASH                 = 0x12
-	BPF_MAP_TYPE_CGROUP_STORAGE           = 0x13
-	BPF_MAP_TYPE_REUSEPORT_SOCKARRAY      = 0x14
-	BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE    = 0x15
-	BPF_MAP_TYPE_QUEUE                    = 0x16
-	BPF_MAP_TYPE_STACK                    = 0x17
-	BPF_MAP_TYPE_SK_STORAGE               = 0x18
-	BPF_MAP_TYPE_DEVMAP_HASH              = 0x19
-	BPF_PROG_TYPE_UNSPEC                  = 0x0
-	BPF_PROG_TYPE_SOCKET_FILTER           = 0x1
-	BPF_PROG_TYPE_KPROBE                  = 0x2
-	BPF_PROG_TYPE_SCHED_CLS               = 0x3
-	BPF_PROG_TYPE_SCHED_ACT               = 0x4
-	BPF_PROG_TYPE_TRACEPOINT              = 0x5
-	BPF_PROG_TYPE_XDP                     = 0x6
-	BPF_PROG_TYPE_PERF_EVENT              = 0x7
-	BPF_PROG_TYPE_CGROUP_SKB              = 0x8
-	BPF_PROG_TYPE_CGROUP_SOCK             = 0x9
-	BPF_PROG_TYPE_LWT_IN                  = 0xa
-	BPF_PROG_TYPE_LWT_OUT                 = 0xb
-	BPF_PROG_TYPE_LWT_XMIT                = 0xc
-	BPF_PROG_TYPE_SOCK_OPS                = 0xd
-	BPF_PROG_TYPE_SK_SKB                  = 0xe
-	BPF_PROG_TYPE_CGROUP_DEVICE           = 0xf
-	BPF_PROG_TYPE_SK_MSG                  = 0x10
-	BPF_PROG_TYPE_RAW_TRACEPOINT          = 0x11
-	BPF_PROG_TYPE_CGROUP_SOCK_ADDR        = 0x12
-	BPF_PROG_TYPE_LWT_SEG6LOCAL           = 0x13
-	BPF_PROG_TYPE_LIRC_MODE2              = 0x14
-	BPF_PROG_TYPE_SK_REUSEPORT            = 0x15
-	BPF_PROG_TYPE_FLOW_DISSECTOR          = 0x16
-	BPF_PROG_TYPE_CGROUP_SYSCTL           = 0x17
-	BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE = 0x18
-	BPF_PROG_TYPE_CGROUP_SOCKOPT          = 0x19
-	BPF_PROG_TYPE_TRACING                 = 0x1a
-	BPF_CGROUP_INET_INGRESS               = 0x0
-	BPF_CGROUP_INET_EGRESS                = 0x1
-	BPF_CGROUP_INET_SOCK_CREATE           = 0x2
-	BPF_CGROUP_SOCK_OPS                   = 0x3
-	BPF_SK_SKB_STREAM_PARSER              = 0x4
-	BPF_SK_SKB_STREAM_VERDICT             = 0x5
-	BPF_CGROUP_DEVICE                     = 0x6
-	BPF_SK_MSG_VERDICT                    = 0x7
-	BPF_CGROUP_INET4_BIND                 = 0x8
-	BPF_CGROUP_INET6_BIND                 = 0x9
-	BPF_CGROUP_INET4_CONNECT              = 0xa
-	BPF_CGROUP_INET6_CONNECT              = 0xb
-	BPF_CGROUP_INET4_POST_BIND            = 0xc
-	BPF_CGROUP_INET6_POST_BIND            = 0xd
-	BPF_CGROUP_UDP4_SENDMSG               = 0xe
-	BPF_CGROUP_UDP6_SENDMSG               = 0xf
-	BPF_LIRC_MODE2                        = 0x10
-	BPF_FLOW_DISSECTOR                    = 0x11
-	BPF_CGROUP_SYSCTL                     = 0x12
-	BPF_CGROUP_UDP4_RECVMSG               = 0x13
-	BPF_CGROUP_UDP6_RECVMSG               = 0x14
-	BPF_CGROUP_GETSOCKOPT                 = 0x15
-	BPF_CGROUP_SETSOCKOPT                 = 0x16
-	BPF_TRACE_RAW_TP                      = 0x17
-	BPF_TRACE_FENTRY                      = 0x18
-	BPF_TRACE_FEXIT                       = 0x19
-	BPF_STACK_BUILD_ID_EMPTY              = 0x0
-	BPF_STACK_BUILD_ID_VALID              = 0x1
-	BPF_STACK_BUILD_ID_IP                 = 0x2
-	BPF_ADJ_ROOM_NET                      = 0x0
-	BPF_ADJ_ROOM_MAC                      = 0x1
-	BPF_HDR_START_MAC                     = 0x0
-	BPF_HDR_START_NET                     = 0x1
-	BPF_LWT_ENCAP_SEG6                    = 0x0
-	BPF_LWT_ENCAP_SEG6_INLINE             = 0x1
-	BPF_LWT_ENCAP_IP                      = 0x2
-	BPF_OK                                = 0x0
-	BPF_DROP                              = 0x2
-	BPF_REDIRECT                          = 0x7
-	BPF_LWT_REROUTE                       = 0x80
-	BPF_SOCK_OPS_VOID                     = 0x0
-	BPF_SOCK_OPS_TIMEOUT_INIT             = 0x1
-	BPF_SOCK_OPS_RWND_INIT                = 0x2
-	BPF_SOCK_OPS_TCP_CONNECT_CB           = 0x3
-	BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB    = 0x4
-	BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB   = 0x5
-	BPF_SOCK_OPS_NEEDS_ECN                = 0x6
-	BPF_SOCK_OPS_BASE_RTT                 = 0x7
-	BPF_SOCK_OPS_RTO_CB                   = 0x8
-	BPF_SOCK_OPS_RETRANS_CB               = 0x9
-	BPF_SOCK_OPS_STATE_CB                 = 0xa
-	BPF_SOCK_OPS_TCP_LISTEN_CB            = 0xb
-	BPF_SOCK_OPS_RTT_CB                   = 0xc
-	BPF_TCP_ESTABLISHED                   = 0x1
-	BPF_TCP_SYN_SENT                      = 0x2
-	BPF_TCP_SYN_RECV                      = 0x3
-	BPF_TCP_FIN_WAIT1                     = 0x4
-	BPF_TCP_FIN_WAIT2                     = 0x5
-	BPF_TCP_TIME_WAIT                     = 0x6
-	BPF_TCP_CLOSE                         = 0x7
-	BPF_TCP_CLOSE_WAIT                    = 0x8
-	BPF_TCP_LAST_ACK                      = 0x9
-	BPF_TCP_LISTEN                        = 0xa
-	BPF_TCP_CLOSING                       = 0xb
-	BPF_TCP_NEW_SYN_RECV                  = 0xc
-	BPF_TCP_MAX_STATES                    = 0xd
-	BPF_FIB_LKUP_RET_SUCCESS              = 0x0
-	BPF_FIB_LKUP_RET_BLACKHOLE            = 0x1
-	BPF_FIB_LKUP_RET_UNREACHABLE          = 0x2
-	BPF_FIB_LKUP_RET_PROHIBIT             = 0x3
-	BPF_FIB_LKUP_RET_NOT_FWDED            = 0x4
-	BPF_FIB_LKUP_RET_FWD_DISABLED         = 0x5
-	BPF_FIB_LKUP_RET_UNSUPP_LWT           = 0x6
-	BPF_FIB_LKUP_RET_NO_NEIGH             = 0x7
-	BPF_FIB_LKUP_RET_FRAG_NEEDED          = 0x8
-	BPF_FD_TYPE_RAW_TRACEPOINT            = 0x0
-	BPF_FD_TYPE_TRACEPOINT                = 0x1
-	BPF_FD_TYPE_KPROBE                    = 0x2
-	BPF_FD_TYPE_KRETPROBE                 = 0x3
-	BPF_FD_TYPE_UPROBE                    = 0x4
-	BPF_FD_TYPE_URETPROBE                 = 0x5
-=======
 	BPF_REG_0                               = 0x0
 	BPF_REG_1                               = 0x1
 	BPF_REG_2                               = 0x2
@@ -2465,7 +2255,6 @@ const (
 	BPF_FLOW_DISSECTOR_F_PARSE_1ST_FRAG     = 0x1
 	BPF_FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL = 0x2
 	BPF_FLOW_DISSECTOR_F_STOP_AT_ENCAP      = 0x4
->>>>>>> guomi
 )
 
 const (
@@ -2631,11 +2420,7 @@ const (
 	DEVLINK_CMD_DPIPE_ENTRIES_GET             = 0x20
 	DEVLINK_CMD_DPIPE_HEADERS_GET             = 0x21
 	DEVLINK_CMD_DPIPE_TABLE_COUNTERS_SET      = 0x22
-<<<<<<< HEAD
-	DEVLINK_CMD_MAX                           = 0x44
-=======
 	DEVLINK_CMD_MAX                           = 0x48
->>>>>>> guomi
 	DEVLINK_PORT_TYPE_NOTSET                  = 0x0
 	DEVLINK_PORT_TYPE_AUTO                    = 0x1
 	DEVLINK_PORT_TYPE_ETH                     = 0x2
@@ -2715,11 +2500,7 @@ const (
 	DEVLINK_ATTR_DPIPE_FIELD_MAPPING_TYPE     = 0x3c
 	DEVLINK_ATTR_PAD                          = 0x3d
 	DEVLINK_ATTR_ESWITCH_ENCAP_MODE           = 0x3e
-<<<<<<< HEAD
-	DEVLINK_ATTR_MAX                          = 0x8c
-=======
 	DEVLINK_ATTR_MAX                          = 0x90
->>>>>>> guomi
 	DEVLINK_DPIPE_FIELD_MAPPING_TYPE_NONE     = 0x0
 	DEVLINK_DPIPE_FIELD_MAPPING_TYPE_IFINDEX  = 0x1
 	DEVLINK_DPIPE_MATCH_TYPE_FIELD_EXACT      = 0x0
@@ -2731,8 +2512,6 @@ const (
 	DEVLINK_DPIPE_HEADER_IPV4                 = 0x1
 	DEVLINK_DPIPE_HEADER_IPV6                 = 0x2
 )
-<<<<<<< HEAD
-=======
 
 type FsverityDigest struct {
 	Algorithm uint16
@@ -2788,4 +2567,3 @@ const (
 	CAN_RAW_FD_FRAMES     = 0x5
 	CAN_RAW_JOIN_FILTERS  = 0x6
 )
->>>>>>> guomi

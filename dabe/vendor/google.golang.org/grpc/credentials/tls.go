@@ -25,15 +25,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net"
-<<<<<<< HEAD
-
-	"google.golang.org/grpc/credentials/internal"
-=======
 	"net/url"
 
 	"google.golang.org/grpc/credentials/internal"
 	credinternal "google.golang.org/grpc/internal/credentials"
->>>>>>> guomi
 )
 
 // TLSInfo contains the auth information for a TLS authenticated connection.
@@ -41,11 +36,8 @@ import (
 type TLSInfo struct {
 	State tls.ConnectionState
 	CommonAuthInfo
-<<<<<<< HEAD
-=======
 	// This API is experimental.
 	SPIFFEID *url.URL
->>>>>>> guomi
 }
 
 // AuthType returns the type of TLSInfo as a string.
@@ -106,9 +98,6 @@ func (c *tlsCreds) ClientHandshake(ctx context.Context, authority string, rawCon
 		conn.Close()
 		return nil, nil, ctx.Err()
 	}
-<<<<<<< HEAD
-	return internal.WrapSyscallConn(rawConn, conn), TLSInfo{conn.ConnectionState(), CommonAuthInfo{PrivacyAndIntegrity}}, nil
-=======
 	tlsInfo := TLSInfo{
 		State: conn.ConnectionState(),
 		CommonAuthInfo: CommonAuthInfo{
@@ -120,7 +109,6 @@ func (c *tlsCreds) ClientHandshake(ctx context.Context, authority string, rawCon
 		tlsInfo.SPIFFEID = id
 	}
 	return internal.WrapSyscallConn(rawConn, conn), tlsInfo, nil
->>>>>>> guomi
 }
 
 func (c *tlsCreds) ServerHandshake(rawConn net.Conn) (net.Conn, AuthInfo, error) {
@@ -129,9 +117,6 @@ func (c *tlsCreds) ServerHandshake(rawConn net.Conn) (net.Conn, AuthInfo, error)
 		conn.Close()
 		return nil, nil, err
 	}
-<<<<<<< HEAD
-	return internal.WrapSyscallConn(rawConn, conn), TLSInfo{conn.ConnectionState(), CommonAuthInfo{PrivacyAndIntegrity}}, nil
-=======
 	tlsInfo := TLSInfo{
 		State: conn.ConnectionState(),
 		CommonAuthInfo: CommonAuthInfo{
@@ -143,7 +128,6 @@ func (c *tlsCreds) ServerHandshake(rawConn net.Conn) (net.Conn, AuthInfo, error)
 		tlsInfo.SPIFFEID = id
 	}
 	return internal.WrapSyscallConn(rawConn, conn), tlsInfo, nil
->>>>>>> guomi
 }
 
 func (c *tlsCreds) Clone() TransportCredentials {

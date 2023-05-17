@@ -24,11 +24,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-<<<<<<< HEAD
-
-	"google.golang.org/grpc/grpclog"
-=======
->>>>>>> guomi
 )
 
 // NewLoggerFromConfigString reads the string and build a logger. It can be used
@@ -55,11 +50,7 @@ func NewLoggerFromConfigString(s string) Logger {
 	methods := strings.Split(s, ",")
 	for _, method := range methods {
 		if err := l.fillMethodLoggerWithConfigString(method); err != nil {
-<<<<<<< HEAD
-			grpclog.Warningf("failed to parse binary log config: %v", err)
-=======
 			grpclogLogger.Warningf("failed to parse binary log config: %v", err)
->>>>>>> guomi
 			return nil
 		}
 	}

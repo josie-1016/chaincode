@@ -6,11 +6,6 @@
 
 package cpu
 
-<<<<<<< HEAD
-const cacheLineSize = 64
-
-func init() {
-=======
 import "runtime"
 
 const cacheLineSize = 64
@@ -62,7 +57,6 @@ func initOptions() {
 
 func archInit() {
 
->>>>>>> guomi
 	Initialized = true
 
 	maxID, _, _, _ := cpuid(0, 0)
@@ -85,22 +79,15 @@ func archInit() {
 	X86.HasOSXSAVE = isSet(27, ecx1)
 	X86.HasRDRAND = isSet(30, ecx1)
 
-<<<<<<< HEAD
-	osSupportsAVX := false
-=======
 	var osSupportsAVX, osSupportsAVX512 bool
->>>>>>> guomi
 	// For XGETBV, OSXSAVE bit is required and sufficient.
 	if X86.HasOSXSAVE {
 		eax, _ := xgetbv()
 		// Check if XMM and YMM registers have OS support.
 		osSupportsAVX = isSet(1, eax) && isSet(2, eax)
-<<<<<<< HEAD
-=======
 
 		// Check if OPMASK and ZMM registers have OS support.
 		osSupportsAVX512 = osSupportsAVX && isSet(5, eax) && isSet(6, eax) && isSet(7, eax)
->>>>>>> guomi
 	}
 
 	X86.HasAVX = isSet(28, ecx1) && osSupportsAVX
@@ -109,19 +96,13 @@ func archInit() {
 		return
 	}
 
-<<<<<<< HEAD
-	_, ebx7, _, _ := cpuid(7, 0)
-=======
 	_, ebx7, ecx7, edx7 := cpuid(7, 0)
->>>>>>> guomi
 	X86.HasBMI1 = isSet(3, ebx7)
 	X86.HasAVX2 = isSet(5, ebx7) && osSupportsAVX
 	X86.HasBMI2 = isSet(8, ebx7)
 	X86.HasERMS = isSet(9, ebx7)
 	X86.HasRDSEED = isSet(18, ebx7)
 	X86.HasADX = isSet(19, ebx7)
-<<<<<<< HEAD
-=======
 
 	X86.HasAVX512 = isSet(16, ebx7) && osSupportsAVX512 // Because avx-512 foundation is the core required extension
 	if X86.HasAVX512 {
@@ -147,7 +128,6 @@ func archInit() {
 		eax71, _, _, _ := cpuid(7, 1)
 		X86.HasAVX512BF16 = isSet(5, eax71)
 	}
->>>>>>> guomi
 }
 
 func isSet(bitpos uint, value uint32) bool {

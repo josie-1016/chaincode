@@ -6,11 +6,7 @@
 
 package cpu
 
-<<<<<<< HEAD
-func init() {
-=======
 func archInit() {
->>>>>>> guomi
 	if err := readHWCAP(); err != nil {
 		return
 	}

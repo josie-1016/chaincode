@@ -480,17 +480,6 @@ func (s *isolatingRunSequence) resolveWeakTypes() {
 
 	// Rule W1.
 	// Changes all NSMs.
-<<<<<<< HEAD
-	preceedingCharacterType := s.sos
-	for i, t := range s.types {
-		if t == NSM {
-			s.types[i] = preceedingCharacterType
-		} else {
-			if t.in(LRI, RLI, FSI, PDI) {
-				preceedingCharacterType = ON
-			}
-			preceedingCharacterType = t
-=======
 	precedingCharacterType := s.sos
 	for i, t := range s.types {
 		if t == NSM {
@@ -500,7 +489,6 @@ func (s *isolatingRunSequence) resolveWeakTypes() {
 				precedingCharacterType = ON
 			}
 			precedingCharacterType = t
->>>>>>> guomi
 		}
 	}
 
