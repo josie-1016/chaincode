@@ -75,7 +75,13 @@ func shareMessage(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error("too much tags")
 	}
 
-	message := data.NewSharedMessage(shareRequest.Uid, shareRequest.Content, shareRequest.Tags, shareRequest.Timestamp, shareRequest.FileName, shareRequest.Ip, shareRequest.Location, shareRequest.Policy)
+	var message *data.SharedMessage
+	if shareRequest.Org == "" {
+		message = data.NewSharedMessage(shareRequest.Uid, shareRequest.Content, shareRequest.Tags, shareRequest.Timestamp, shareRequest.FileName, shareRequest.Ip, shareRequest.Location, shareRequest.Policy)
+	} else {
+		log.Println("Saved by Org")
+		message = data.NewSharedMessage(shareRequest.Org, shareRequest.Content, shareRequest.Tags, shareRequest.Timestamp, shareRequest.FileName, shareRequest.Ip, shareRequest.Location, shareRequest.Policy)
+	}
 	if err := data.SaveSharedMessage(message, stub); err != nil {
 		log.Println(err)
 		return shim.Error(err.Error())

@@ -105,6 +105,7 @@ type ShareMessageRequest struct {
 	Ip       string `json:"ip"`
 	Location string `json:"location"`
 	Policy   string `json:"policy"`
+	Org      string `json:"org"`
 }
 
 // 整合请求
@@ -183,6 +184,11 @@ type GetCommitsRequest struct {
 	Uid  string   `json:"uid"`
 	Pids []string `json:"pids"`
 }
+
+type GetOrgRequest struct {
+	OrgId string `json:"orgId"`
+}
+
 // 上传SM2密文申请
 type ShareSM2MessageRequest struct {
 	BaseRequest

@@ -153,7 +153,12 @@ func queryOrgApply(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 }
 
 func queryOrg(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	oid := args[0]
+	var requestStr = args[0]
+	orgRequest := new(request.GetOrgRequest)
+	if err := json.Unmarshal([]byte(requestStr), orgRequest); err != nil {
+		return shim.Error(err.Error())
+	}
+	oid := orgRequest.OrgId
 	org, err := data.QueryOrgByOid(oid, stub)
 	if err != nil {
 		log.Println(err)

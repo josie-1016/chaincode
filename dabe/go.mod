@@ -18,7 +18,7 @@ require (
 	github.com/spf13/viper v1.7.0 // indirect
 	github.com/sykesm/zap-logfmt v0.0.3 // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
-	github.com/vangogo/DecentralizedABE v1.0.8
+	github.com/vangogo/DecentralizedABE v1.0.9
 	go.uber.org/zap v1.15.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
