@@ -94,11 +94,11 @@ func (d *DABE) Encrypt(m string, uPolicy string, authorities map[string]Authorit
 	iv := d.EGG.NewFieldElement().Rand()
 	fmt.Println(key.String())
 	fmt.Println(iv.String())
-	block, err := sm4.NewCipher(key.Bytes()[0:32])
+	block, err := sm4.NewCipher(key.Bytes()[0:16])
 	if err != nil {
 		panic(err)
 	}
-	encrypter := cipher.NewCBCEncrypter(block, iv.Bytes()[0:32])
+	encrypter := cipher.NewCBCEncrypter(block, iv.Bytes()[0:16])
 	// P7填充的CBC加密
 	err = padding.P7BlockEnc(encrypter, srcIn, encOut)
 	if err != nil {
@@ -231,7 +231,7 @@ func (d *DABE) Decrypt(cipherS *CipherSM4, privateKeys map[string]*pbc.Element, 
 	if key == nil {
 		return nil, fmt.Errorf("User policy not match,decrypt failed.\n")
 	}
-	if len(key.Bytes()) <= 32 {
+	if len(key.Bytes()) <= 16 {
 		return nil, fmt.Errorf("invalid SM4key:: decrypt failed.\n")
 	}
 	fmt.Println(key.String())
@@ -239,17 +239,17 @@ func (d *DABE) Decrypt(cipherS *CipherSM4, privateKeys map[string]*pbc.Element, 
 	if iv == nil {
 		return nil, fmt.Errorf("User policy not match,decrypt failed.\n")
 	}
-	if len(iv.Bytes()) <= 32 {
+	if len(iv.Bytes()) <= 16 {
 		return nil, fmt.Errorf("invalid aeskey:: decrypt failed.\n")
 	}
 	fmt.Println(iv.String())
-	block, err := sm4.NewCipher(key.Bytes()[0:32])
+	block, err := sm4.NewCipher(key.Bytes()[0:16])
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(block)
 	cipherReader := bytes.NewReader(cipherS.CipherText)
-	decrypter := cipher.NewCBCDecrypter(block, iv.Bytes()[0:32])
+	decrypter := cipher.NewCBCDecrypter(block, iv.Bytes()[0:16])
 	decOut := bytes.NewBuffer(make([]byte, 0, 1024))
 	err = padding.P7BlockDecrypt(decrypter, cipherReader, decOut)
 	if err != nil {

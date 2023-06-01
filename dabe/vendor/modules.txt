@@ -149,7 +149,7 @@ github.com/spf13/viper
 github.com/subosito/gotenv
 # github.com/sykesm/zap-logfmt v0.0.3
 github.com/sykesm/zap-logfmt
-# github.com/vangogo/DecentralizedABE v1.0.6
+# github.com/vangogo/DecentralizedABE v1.0.8
 github.com/vangogo/DecentralizedABE/model
 github.com/vangogo/DecentralizedABE/model/sm4
 github.com/vangogo/DecentralizedABE/model/sm4/padding

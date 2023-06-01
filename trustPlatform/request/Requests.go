@@ -105,6 +105,7 @@ type ShareMessageRequest struct {
 	Ip       string `json:"ip"`
 	Location string `json:"location"`
 	Policy   string `json:"policy"`
+	Org      string `json:"org"`
 }
 
 // 整合请求
@@ -151,6 +152,10 @@ type GetOrgApplyRequest struct {
 	AttrName string                `json:"attrName"`
 	Status   data.ApplyStatus      `json:"status"`
 	Type     constant.OrgApplyType `json:"type"`
+}
+
+type GetOrgRequest struct {
+	OrgId string `json:"orgId"`
 }
 
 // 上传SM2密文申请

@@ -27,7 +27,6 @@ func (d *DABECC) CommonInvoke(stub shim.ChaincodeStubInterface) pb.Response {
 func (d *DABECC) encrypt(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	requestBytes := args[0]
 	request := new(EncryptRequest)
-	log.Println(requestBytes)
 	if err := DecentralizedABE.Deserialize2Struct([]byte(requestBytes), request); err != nil {
 		log.Println(err)
 		return shim.Error(err.Error())

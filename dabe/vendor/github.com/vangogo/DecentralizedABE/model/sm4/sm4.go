@@ -25,7 +25,7 @@ import (
 	"strconv"
 )
 
-const BlockSize = 32
+const BlockSize = 16
 
 var IV = make([]byte, BlockSize)
 
