@@ -3,11 +3,12 @@ package data
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-kratos/kratos/pkg/ecode"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"log"
 	"trustPlatform/constant"
 	"trustPlatform/utils"
+
+	"github.com/go-kratos/kratos/pkg/ecode"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
 func init() {
@@ -185,6 +186,43 @@ func GetSharedMessage(fromUid, tag string, pageSize int, bookmark string, stub s
 
 	log.Println(queryString)
 	if result, err = utils.GetBytesFromDB2(stub, queryString, pageSize, bookmark); err != nil {
+		return nil, err
+	}
+	return
+}
+
+// ===================================================================================
+// 查找门限文件分享信息
+// ===================================================================================
+func GetThreholdSharedMessage(orgName, fileName string, stub shim.ChaincodeStubInterface) (result []byte, err error) {
+	log.Printf("query shared file message  %s from %s\n", fileName, orgName)
+	if fileName == "" || orgName == "" {
+		log.Println("cannot query all message")
+		return nil, ecode.Error(ecode.RequestErr, "cannot query all message")
+	}
+	queryString := fmt.Sprintf("{\"selector\":{\"docType\":\"%s\",\"uid\":\"%s\",\"fileName\":\"%s\"}}", constant.ThreholdSharedMessage, orgName, fileName)
+
+	log.Println(queryString)
+	if result, err = utils.GetBytesFromDB3(stub, queryString); err != nil {
+		return nil, err
+	}
+	return
+}
+
+// ===================================================================================
+// 查找门限文件分享信息
+// ===================================================================================
+func GetThreholdAppluMessage(orgName, fileName string, pagesize int, bookmark string, stub shim.ChaincodeStubInterface) (result []byte, err error) {
+	log.Printf("query threshold file apply in:%s for file:%s\n", orgName, fileName)
+	if fileName == "" || orgName == "" {
+		log.Println("cannot query all message")
+		return nil, ecode.Error(ecode.RequestErr, "cannot query all message")
+	}
+	queryString := fmt.Sprintf("{\"selector\":{\"docType\":\"%s\",\"orgId\":\"%s\",\"attrName\":\"%s\",\"type\":2,\"status\":{\"$lt\":\"%d\"}}}",
+		constant.OrgApply, orgName, fileName, PendingApprove)
+
+	log.Println(queryString)
+	if result, err = utils.GetBytesFromDB2(stub, queryString, pagesize, bookmark); err != nil {
 		return nil, err
 	}
 	return
