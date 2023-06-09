@@ -1,13 +1,12 @@
 package main
 
 import (
-	"log"
-	"strings"
-
-	DecentralizedABE "github.com/vangogo/tree/ThresholdABE"
-
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
+	DecentralizedABE "github.com/vangogo/DecentralizedABE/model"
+	// DecentralizedABE "github.com/wjfn/DecentralizedABE2020/model"
+	"log"
+	"strings"
 )
 
 // 主模块
