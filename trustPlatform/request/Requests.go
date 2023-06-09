@@ -25,6 +25,12 @@ type UserAnnounceAttrRequest struct {
 	APK      string `json:"apk"`
 }
 
+// 用户申请生成门限组织
+type ThresholdOrgApply struct {
+	BaseRequest
+	OrgId string `json:"orgId"`
+}
+
 // 发起生成新组织请求
 type CreateOrgApplyRequest struct {
 	BaseRequest
@@ -41,11 +47,33 @@ type DeclareOrgAttrApplyRequest struct {
 	AttrName string `json:"attrName"`
 }
 
+// 发起门限解密申请
+type ApplyThreholdFileRequest struct {
+	BaseRequest
+	OrgId    string `json:"orgId"`
+	FileName string `json:"fileName"`
+}
+
 // 同意加入新组织/同意声明属性
 type ApproveOrgApplyRequest struct {
 	BaseRequest
 	OrgId    string `json:"orgId"`
 	AttrName string `json:"attrName"`
+}
+
+// 同意加入门限组织
+type ApproveThresholdOrgApplyRequest struct {
+	BaseRequest
+	OrgId  string `json:"orgId"`
+	PartSK string `json:"partSk"`
+}
+
+// 同意用户申请门限解密
+type ApproveThreholdApplyRequest struct {
+	BaseRequest
+	OrgId    string `json:"orgId"`
+	FileName string `json:"fileName"`
+	FromUid  string `json:"fromUid"`
 }
 
 type SceneType int8
@@ -72,6 +100,22 @@ type SubmitPartPKRequest struct {
 	AttrName string    `json:"attrName"`
 	Type     SceneType `json:"type"`
 	PartPK   string    `json:"partPk"`
+}
+
+// 提交门限公钥参数
+type SubmitThreholdPartPKRequest struct {
+	BaseRequest
+	OrgId    string `json:"orgId"`
+	FileName string `json:"fileName"`
+	PartPK   string `json:"partPk"`
+	FromUId  string `json:"fromUid"`
+}
+
+type QueryThreholdFileApply struct {
+	BaseRequest
+	OrgId    string `json:"orgId"`
+	FileName string `json:"fileName"`
+	FromUId  string `json:"fromUid"`
 }
 
 // 申请属性参数
@@ -108,12 +152,33 @@ type ShareMessageRequest struct {
 	Org      string `json:"org"`
 }
 
+// 上传门限密文
+type ThreholdShareMessageRequest struct {
+	BaseRequest
+	FileName string `json:"fileName"`
+	OrgName  string `json:"orgName"`
+}
+
 // 整合请求
 type MixPartPKRequest struct {
 	BaseRequest
 	OrgId    string    `json:"orgId"`
 	AttrName string    `json:"attrName"`
 	Type     SceneType `json:"type"`
+}
+
+// 整合请求
+type ThreholdMixPartPKRequest struct {
+	BaseRequest
+	OrgId         string `json:"orgId"`
+	FileName      string `json:"fileName"`
+	CipherContent string `json:"cipherContent"`
+}
+
+// 整合请求
+type ThreholdMixRequest struct {
+	BaseRequest
+	OrgId string `json:"orgId"`
 }
 
 // get share
@@ -144,6 +209,12 @@ type GetSharedMessageRequest struct {
 	Tag      string `json:"tag"`
 	PageSize int    `json:"pageSize"`
 	Bookmark string `json:"bookmark"`
+}
+
+// 查询分享信息
+type GetThresholdSharedMessageRequest struct {
+	OrgName  string `json:"orgName"`
+	FileName string `json:"fileName"`
 }
 
 // 查询分享信息
@@ -204,4 +275,18 @@ type GetSharedSM2MessageRequest struct {
 	ToName   string `json:"toName"`
 	PageSize int    `json:"pageSize"`
 	Bookmark string `json:"bookmark"`
+}
+
+// 查询分享信息
+type GetThreholdApplyRequest struct {
+	OrgId    string           `json:"orgId"`
+	FileName string           `json:"fileName"`
+	Status   data.ApplyStatus `json:"status"`
+	FromUid  string           `json:"fromUid"`
+}
+
+// 查询分享信息
+type ThreholdEncryptApplyRequest struct {
+	PlainContent string `json:"plainContent"`
+	OrgId        string `json:"orgId"`
 }

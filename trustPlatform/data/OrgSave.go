@@ -2,10 +2,11 @@ package data
 
 import (
 	"encoding/json"
-	"github.com/go-kratos/kratos/pkg/ecode"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"log"
 	"trustPlatform/constant"
+
+	"github.com/go-kratos/kratos/pkg/ecode"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
 func init() {
@@ -39,6 +40,8 @@ func SaveOrgApply(apply *OrgApply, stub shim.ChaincodeStubInterface) (err error)
 // ===================================================================================
 func SaveOrg(org *Org, stub shim.ChaincodeStubInterface) (err error) {
 	log.Println("save org with oid: " + org.OrgId)
+	log.Println("menpub is:", []byte(org.ThreholdPub))
+	log.Println("len is:", len([]byte(org.ThreholdPub)))
 	bytes, err := json.Marshal(org)
 	if err != nil {
 		return ecode.Errorf(ecode.ServerErr, "marshal org error")

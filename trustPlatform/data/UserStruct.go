@@ -1,8 +1,9 @@
 package data
 
 import (
-	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"trustPlatform/constant"
+
+	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
 type User struct {
@@ -93,13 +94,12 @@ type SharedMessage struct {
 	Uid  string   `json:"uid"`
 	Tags []string `json:"tags"`
 	// 加密内容
-	Content string `json:"content"`
+	Content   string `json:"content"`
 	Timestamp string `json:"timestamp"`
-	FileName string `json:"fileName"`
-	Ip string `json:"ip"`
-	Location string `json:"location"`
-	Policy string `json:"policy"`
-
+	FileName  string `json:"fileName"`
+	Ip        string `json:"ip"`
+	Location  string `json:"location"`
+	Policy    string `json:"policy"`
 }
 
 func NewSharedMessage(uid, content string, tags []string, timestamp string, fileName string, ip string, location string, policy string) *SharedMessage {
@@ -113,5 +113,22 @@ func NewSharedMessage(uid, content string, tags []string, timestamp string, file
 		Ip:         ip,
 		Location:   location,
 		Policy:     policy,
+	}
+}
+
+type ThreholdSharedMessage struct {
+	// couchDB使用的type
+	ObjectType string `json:"docType"`
+	Timestamp  string `json:"timestamp"`
+	FileName   string `json:"fileName"`
+	Uid        string `json:"uid"`
+}
+
+func NewThreholdSharedMessage(fileName string, org string, timestamp string) *ThreholdSharedMessage {
+	return &ThreholdSharedMessage{
+		ObjectType: constant.ThreholdSharedMessage,
+		FileName:   fileName,
+		Uid:        org,
+		Timestamp:  timestamp,
 	}
 }

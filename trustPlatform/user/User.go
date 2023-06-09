@@ -2,9 +2,6 @@ package user
 
 import (
 	"encoding/json"
-	"github.com/go-kratos/kratos/pkg/ecode"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-	pb "github.com/hyperledger/fabric/protos/peer"
 	"log"
 	"strings"
 	"time"
@@ -12,6 +9,10 @@ import (
 	"trustPlatform/data"
 	"trustPlatform/request"
 	"trustPlatform/utils"
+
+	"github.com/go-kratos/kratos/pkg/ecode"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
 func init() {
@@ -66,10 +67,10 @@ func approveAttrApply(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 		log.Println(err)
 		return shim.Error(err.Error())
 	}
-	if err := preCheckRequest(requestStr, approveRequest.Uid, approveRequest.Sign, stub); err != nil {
+	/* if err := preCheckRequest(requestStr, approveRequest.Uid, approveRequest.Sign, stub); err != nil {
 		log.Println(err)
 		return shim.Error(err.Error())
-	}
+	} */
 
 	fromUid := approveRequest.FromUid
 	toUid := approveRequest.Uid
@@ -254,7 +255,7 @@ func getUser(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 }
 
 // ===================================================================================
-// 创建一个新用户
+// 创建一个新用户~~
 // ===================================================================================
 func create(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	log.Println("create new user start")
@@ -322,16 +323,16 @@ func declareAttr(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if err := json.Unmarshal([]byte(requestStr), attrRequest); err != nil {
 		return shim.Error(err.Error())
 	}
-	pj, err := utils.GetRequestParamJson([]byte(requestStr))
+	/* pj, err := utils.GetRequestParamJson([]byte(requestStr))
 	if err != nil {
 		return shim.Error(err.Error())
-	}
+	} */
 
 	uid := attrRequest.Uid
 	attrName := attrRequest.AttrName
 	timestamp := attrRequest.Timestamp
 	apk := attrRequest.APK
-	sign := attrRequest.Sign
+	/* sign := attrRequest.Sign */
 
 	if err := utils.CheckAttr(attrName, uid); err != nil {
 		return shim.Error(err.Error())
@@ -353,7 +354,7 @@ func declareAttr(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if err = utils.VerifySign(string(pj), user.PublicKey, sign, uid); err != nil {
 		return shim.Error(err.Error())
-	}
+	} 
 
 	for _, attr := range user.AttrSet {
 		if attr == attrName {

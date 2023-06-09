@@ -2,14 +2,15 @@ package common
 
 import (
 	"encoding/json"
-	"github.com/go-kratos/kratos/pkg/ecode"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-	pb "github.com/hyperledger/fabric/protos/peer"
 	"log"
 	"strings"
 	"trustPlatform/data"
 	"trustPlatform/request"
 	"trustPlatform/utils"
+
+	"github.com/go-kratos/kratos/pkg/ecode"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
 func init() {
@@ -36,8 +37,12 @@ func Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return getAttr(stub, args)
 	} else if strings.HasPrefix(function, "/common/shareMessage") {
 		return shareMessage(stub, args)
+	} else if strings.HasPrefix(function, "/common/shareThreholdMessage") {
+		return shareMessageThreshold(stub, args)
 	} else if strings.HasPrefix(function, "/common/getMessage") {
 		return getMessage(stub, args)
+	} else if strings.HasPrefix(function, "/common/getThresholdMessage") {
+		return getThreholdMessage(stub, args)
 	}
 
 	return shim.Error("Invalid invoke function name. Expecting \"/common/getAttr\" ")
@@ -67,10 +72,10 @@ func shareMessage(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		log.Println(err)
 		return shim.Error(err.Error())
 	}
-	if err := preCheckRequest(requestStr, shareRequest.Uid, shareRequest.Sign, stub); err != nil {
+	/* if err := preCheckRequest(requestStr, shareRequest.Uid, shareRequest.Sign, stub); err != nil {
 		log.Println(err)
 		return shim.Error(err.Error())
-	}
+	} */
 	if len(shareRequest.Tags) > 10 {
 		return shim.Error("too much tags")
 	}
@@ -83,6 +88,28 @@ func shareMessage(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		message = data.NewSharedMessage(shareRequest.Org, shareRequest.Content, shareRequest.Tags, shareRequest.Timestamp, shareRequest.FileName, shareRequest.Ip, shareRequest.Location, shareRequest.Policy)
 	}
 	if err := data.SaveSharedMessage(message, stub); err != nil {
+		log.Println(err)
+		return shim.Error(err.Error())
+	}
+	return shim.Success(nil)
+}
+
+// ===================================================================================
+// 分享信息
+// ===================================================================================
+func shareMessageThreshold(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	log.Println("enter shareMessageThreshold")
+	// 反序列化请求，验签
+	var requestStr = args[0]
+	log.Println(requestStr)
+	shareRequest := new(request.ShareMessageRequest)
+	if err := json.Unmarshal([]byte(requestStr), shareRequest); err != nil {
+		log.Println(err)
+		return shim.Error(err.Error())
+	}
+
+	message := data.NewThreholdSharedMessage(shareRequest.FileName, shareRequest.Uid, shareRequest.Timestamp)
+	if err := data.SaveThreholdSharedMessage(message, stub); err != nil {
 		log.Println(err)
 		return shim.Error(err.Error())
 	}
@@ -104,6 +131,28 @@ func getMessage(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 
 	result, err := data.GetSharedMessage(getRequest.FromUid, getRequest.Tag, getRequest.PageSize, getRequest.Bookmark, stub)
+	if err != nil {
+		log.Println(err)
+		return shim.Error(err.Error())
+	}
+	return shim.Success(result)
+}
+
+// ===================================================================================
+// 获得门限文件信息
+// ===================================================================================
+func getThreholdMessage(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	log.Println("get Threhold message")
+	// 反序列化请求
+	var requestStr = args[0]
+	log.Println(requestStr)
+	getRequest := new(request.GetThresholdSharedMessageRequest)
+	if err := json.Unmarshal([]byte(requestStr), getRequest); err != nil {
+		log.Println(err)
+		return shim.Error(err.Error())
+	}
+
+	result, err := data.GetThreholdSharedMessage(getRequest.OrgName, getRequest.FileName, stub)
 	if err != nil {
 		log.Println(err)
 		return shim.Error(err.Error())
