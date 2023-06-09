@@ -14,13 +14,3 @@ type GenerateAPKRequest struct {
 	T          int
 	AttrName   string
 }
-
-type ThresholdEncryptRequest struct {
-	PlainContent string
-	PubKey       []byte
-}
-
-type ThreholdDecryptRequest struct {
-	Cipher        []byte
-	ThresholdPriv []byte
-}

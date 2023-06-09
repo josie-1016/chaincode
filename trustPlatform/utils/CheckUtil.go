@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"log"
-//	"regexp"
+	"trustPlatform/SM"
+	//	"regexp"
 	//"strconv"
-//	"strings"
+	//	"strings"
 	"time"
 	"trustPlatform/constant"
 )
@@ -14,7 +15,6 @@ import (
 const IncorrectNumberError = "Incorrect number of input arguments. Expecting "
 const InvalidIDError = "id: %s is invalid\n"
 
-//todo 默认为true
 var SignSwitch = true
 
 func init() {
@@ -24,12 +24,12 @@ func init() {
 // ===================================================================================
 // 校验sign
 // ===================================================================================
-func VerifySign(paramJson, publicKey, sign string) (err error) {
+func VerifySign(paramJson, publicKey, sign, uid string) (err error) {
 	if !SignSwitch {
 		log.Println("debug on: no need to verify")
 		return nil
 	}
-	if _, err = VerifyOnBase64(paramJson, sign, publicKey); err != nil {
+	if _, err = SM.VerifySM2(paramJson, sign, publicKey, uid); err != nil {
 		return err
 	}
 	return
@@ -51,11 +51,11 @@ func CheckInputNumber(num int, args []string) (err error) {
 // 检测id名称是否合法
 // ===================================================================================
 func CheckId(id string) (err error) {
-//	if ok, _ := regexp.MatchString("^[a-zA-Z0-9]{6,18}$", id); !ok {
-//		log.Printf(InvalidIDError, id)
-//		err = fmt.Errorf(InvalidIDError, id)
-//		return err
-//	}
+	//	if ok, _ := regexp.MatchString("^[a-zA-Z0-9]{6,18}$", id); !ok {
+	//		log.Printf(InvalidIDError, id)
+	//		err = fmt.Errorf(InvalidIDError, id)
+	//		return err
+	//	}
 	return
 }
 
@@ -63,16 +63,16 @@ func CheckId(id string) (err error) {
 // 检测属性名称是否合法
 // ===================================================================================
 func CheckAttr(attr string, id string) (err error) {
-//	split := strings.Split(attr, ":")
-//	if len(split) != 2 || split[0] != id {
-//		log.Printf("attr %s is not match id %s", attr, id)
-//		return fmt.Errorf("attr %s is not match id %s", attr, id)
-//	}
-//	if ok, _ := regexp.MatchString("^[a-zA-Z0-9]{1,32}$", split[1]); !ok {
-//		log.Printf(InvalidIDError, attr)
-//		err = fmt.Errorf(InvalidIDError, attr)
-//		return err
-//	}
+	//	split := strings.Split(attr, ":")
+	//	if len(split) != 2 || split[0] != id {
+	//		log.Printf("attr %s is not match id %s", attr, id)
+	//		return fmt.Errorf("attr %s is not match id %s", attr, id)
+	//	}
+	//	if ok, _ := regexp.MatchString("^[a-zA-Z0-9]{1,32}$", split[1]); !ok {
+	//		log.Printf(InvalidIDError, attr)
+	//		err = fmt.Errorf(InvalidIDError, attr)
+	//		return err
+	//	}
 	return
 }
 

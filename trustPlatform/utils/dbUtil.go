@@ -3,7 +3,6 @@ package utils
 import (
 	"bytes"
 	"fmt"
-
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
@@ -32,22 +31,6 @@ func GetBytesFromDB(stub shim.ChaincodeStubInterface, queryString string) ([][]b
 
 func GetBytesFromDB2(stub shim.ChaincodeStubInterface, queryString string, pageSize int, bookmark string) ([]byte, error) {
 	resultsIterator, responseMetadata, err := stub.GetQueryResultWithPagination(queryString, int32(pageSize), bookmark)
-	if err != nil {
-		return nil, err
-	}
-	buffer, err := constructQueryResponseFromIterator(resultsIterator)
-	if err != nil {
-		return nil, err
-	}
-
-	buffer.WriteString(",")
-	result := addPaginationMetadataToQueryResults(buffer, responseMetadata)
-	result.WriteString("}")
-	return result.Bytes(), nil
-}
-
-func GetBytesFromDB3(stub shim.ChaincodeStubInterface, queryString string) ([]byte, error) {
-	resultsIterator, responseMetadata, err := stub.GetQueryResultWithPagination(queryString, int32(1), "")
 	if err != nil {
 		return nil, err
 	}
