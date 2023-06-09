@@ -4,10 +4,11 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"github.com/go-kratos/kratos/pkg/ecode"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"log"
 	"trustPlatform/constant"
+
+	"github.com/go-kratos/kratos/pkg/ecode"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
 func init() {
@@ -92,7 +93,7 @@ func SaveUserAttrApply(apply *UserApply, stub shim.ChaincodeStubInterface) (err 
 // ===================================================================================
 func SaveSharedMessage(message *SharedMessage, stub shim.ChaincodeStubInterface) (err error) {
 	log.Printf("save shared message from: %s with %s\n", message.Uid, message.Tags)
-    log.Printf("timestamp:%s\n filename:%s\n", message.Timestamp, message.FileName)
+	log.Printf("timestamp:%s\n filename:%s\n", message.Timestamp, message.FileName)
 	messageBytes, err := json.Marshal(message)
 	if err != nil {
 		return err
@@ -114,5 +115,35 @@ func SaveSharedMessage(message *SharedMessage, stub shim.ChaincodeStubInterface)
 	}
 
 	log.Printf("save shared message from: %s with %s success\n", message.Uid, message.Tags)
+	return
+}
+
+// ===================================================================================
+// 保存门限分享的信息
+// ===================================================================================
+func SaveThreholdSharedMessage(message *ThreholdSharedMessage, stub shim.ChaincodeStubInterface) (err error) {
+	log.Printf("save shared message from: %s \n", message.Uid)
+	log.Printf("timestamp:%s\n filename:%s\n", message.Timestamp, message.FileName)
+	messageBytes, err := json.Marshal(message)
+	if err != nil {
+		return err
+	}
+
+	padding := "0"
+	var key string
+	sth := []byte{1}
+	for len(sth) != 0 {
+		hash := sha256.Sum256([]byte("" + padding))
+		key = constant.ThreholdSharedMessagePrefix + message.Uid + ":" + hex.EncodeToString(hash[:])
+		log.Println("key: ", key)
+		sth, _ = stub.GetState(key)
+		padding += padding
+	}
+
+	if err = stub.PutState(key, messageBytes); err != nil {
+		return err
+	}
+
+	log.Printf("save shared message from: %s with %s success\n", message.Uid, message.FileName)
 	return
 }

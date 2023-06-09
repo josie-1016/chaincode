@@ -21,17 +21,20 @@ type Org struct {
 	N int `json:"n"`
 	// 组织ABE公钥
 	OPK string `json:"opk"`
+	//组织门限公钥
+	ThreholdPub []byte `json:"ThreholdPub"`
 }
 
-func NewOrg(orgId string, t, n int, uidSet []string, opk string) *Org {
+func NewOrg(orgId string, t, n int, uidSet []string, opk string, men []byte) *Org {
 	return &Org{
-		ObjectType: constant.Org,
-		OrgId:      orgId,
-		UidSet:     uidSet,
-		AttrSet:    make([]string, 0),
-		T:          t,
-		N:          n,
-		OPK:        opk,
+		ObjectType:  constant.Org,
+		OrgId:       orgId,
+		UidSet:      uidSet,
+		AttrSet:     make([]string, 0),
+		T:           t,
+		N:           n,
+		OPK:         opk,
+		ThreholdPub: men,
 	}
 }
 
@@ -80,6 +83,28 @@ func NewOrgApply(orgId, fromUid string, uidList []string, t, n int, applyType co
 		shareMap[uid] = make(map[string]string, n-1)
 	}
 	uidMap[fromUid] = true
+	return &OrgApply{
+		ObjectType: constant.OrgApply,
+		OrgId:      orgId,
+		UidMap:     uidMap,
+		T:          t,
+		N:          n,
+		FromUid:    fromUid,
+		Status:     PendingApprove,
+		CreateTime: strconv.FormatInt(time.Now().Unix(), 10),
+		ShareMap:   shareMap,
+		OpkMap:     make(map[string]string),
+		Type:       applyType,
+		AttrName:   attrName,
+	}
+}
+func NewThresholdOrgApply(orgId, fromUid string, uidList []string, t, n int, applyType constant.OrgApplyType, attrName string) *OrgApply {
+	uidMap := make(map[string]bool, n)
+	shareMap := make(map[string]map[string]string, n)
+	for _, uid := range uidList {
+		uidMap[uid] = false
+		shareMap[uid] = make(map[string]string, n-1)
+	}
 	return &OrgApply{
 		ObjectType: constant.OrgApply,
 		OrgId:      orgId,

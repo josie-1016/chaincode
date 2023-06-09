@@ -1,8 +1,9 @@
 package main
 
 import (
+	DecentralizedABE "github.com/vangogo/tree/ThresholdABE"
+
 	"github.com/Nik-U/pbc"
-	DecentralizedABE "github.com/vangogo/DecentralizedABE/model"
 )
 
 type GenerateOPKRequest struct {
@@ -11,7 +12,12 @@ type GenerateOPKRequest struct {
 	N          int
 	T          int
 }
-
+type GenerateOSKRequest struct {
+	UserNames  []string
+	PartPkList []*pbc.Element `field:"3"`
+	N          int
+	T          int
+}
 type GenerateAPKRequest struct {
 	UserNames  []string
 	PartPkList []*pbc.Element `field:"0"`
@@ -26,6 +32,11 @@ type EncryptRequest struct {
 	AuthorityMap map[string]*Authority
 }
 
+type ThreholdEncryptRequest struct {
+	PlainContent string
+	PubKey       []byte
+}
+
 type Authority struct {
 	PK     *pbc.Element `field:"2"`
 	APKMap map[string]*DecentralizedABE.APK
@@ -35,6 +46,11 @@ type DecryptRequest struct {
 	Cipher  string
 	AttrMap map[string]*pbc.Element `field:"0"`
 	Uid     string
+}
+
+type ThreholdDecryptRequest struct {
+	Cipher        []byte
+	ThresholdPriv []byte
 }
 
 func (a *Authority) GetPK() *pbc.Element {

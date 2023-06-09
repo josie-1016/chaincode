@@ -1,13 +1,15 @@
 package main
 
 import (
-	"github.com/Nik-U/pbc"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-	pb "github.com/hyperledger/fabric/protos/peer"
-	DecentralizedABE "github.com/vangogo/DecentralizedABE/model"
 	"log"
 	"strconv"
 	"strings"
+
+	DecentralizedABE "github.com/vangogo/tree/ThresholdABE"
+
+	"github.com/Nik-U/pbc"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
 // ===================================================================================
@@ -149,6 +151,39 @@ func (d *DABECC) assembleShare(stub shim.ChaincodeStubInterface, args []string) 
 	return shim.Success(bytes)
 }
 
+/* func (d *DABECC) assembleMenShare(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	log.Println("user assemble share")
+	userBytes := args[0]
+	orgName := args[1]
+	attrName := args[2]
+	nStr := args[3]
+	n, err := strconv.Atoi(nStr)
+	if err != nil {
+		log.Println(err.Error())
+		return shim.Error(err.Error())
+	}
+	user := new(DecentralizedABE.User)
+	if err := DecentralizedABE.Deserialize2Struct([]byte(userBytes), user); err != nil {
+		log.Println(err.Error())
+		return shim.Error(err.Error())
+	}
+
+	var sharesForUser []*pbc.Element
+	shareForUser = user.OSKMap[orgName].OthersShare
+
+	if _, err := user.AssembleShare(sharesForUser, d.Dabe, n, aid, orgName, attrName); err != nil {
+		log.Println(err.Error())
+		return shim.Error(err.Error())
+	}
+
+	bytes, err := DecentralizedABE.Serialize2Bytes(user)
+	if err != nil {
+		log.Println(err.Error())
+		return shim.Error(err.Error())
+	}
+	return shim.Success(bytes)
+} */
+
 func (d *DABECC) share(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	log.Println("user create share")
 	log.Println(len(args))
@@ -204,6 +239,52 @@ func (d *DABECC) share(stub shim.ChaincodeStubInterface, args []string) pb.Respo
 	return shim.Success(bytes)
 }
 
+/*
+	 func (d *DABECC) shareMen(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+		log.Println("user create share")
+		log.Println(len(args))
+		userBytes := args[0]
+		orgName := args[1]
+		userNames := strings.Split(args[2], ",")
+		tStr := args[3]
+		nStr := args[4]
+		t, err := strconv.Atoi(tStr)
+		if err != nil {
+			log.Println(err.Error())
+			return shim.Error(err.Error())
+		}
+		n, err := strconv.Atoi(nStr)
+		if err != nil {
+			log.Println(err.Error())
+			return shim.Error(err.Error())
+		}
+
+		user := new(DecentralizedABE.User)
+		if err := DecentralizedABE.Deserialize2Struct([]byte(userBytes), user); err != nil {
+			log.Println(err.Error())
+			return shim.Error(err.Error())
+		}
+
+		org, err := d.Dabe.OrgSetup(n, t, orgName, userNames)
+		if err != nil {
+			log.Println(err.Error())
+			return shim.Error(err.Error())
+		}
+
+		if _, err := user.GenerateOrgShare(n, t, org.UserName2GID, orgName, d.Dabe); err != nil {
+			log.Println(err.Error())
+			return shim.Error(err.Error())
+
+		}
+
+		bytes, err := DecentralizedABE.Serialize2Bytes(user)
+		if err != nil {
+			log.Println(err.Error())
+			return shim.Error(err.Error())
+		}
+		return shim.Success(bytes)
+	}
+*/
 func (d *DABECC) declareAttr(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	log.Println("user declareAttr")
 	userBytes := args[0]
